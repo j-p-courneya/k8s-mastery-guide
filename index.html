@@ -3,8 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>K8s Mastery Guide</title>
+<title>K8s Mastery Guide — From HPC/Slurm to Kubernetes</title>
+<meta name="description" content="A comprehensive, self-paced Kubernetes learning guide for bioinformaticians and HPC/Slurm admins. 34 sections covering installation through CRDs, Operators, and GitOps, plus Jetstream2 lab plans and bioinformatics exercises.">
+<meta name="keywords" content="Kubernetes, K8s, HPC, Slurm, bioinformatics, kubectl, GitOps, Kubeflow, Nextflow, Jetstream2">
+<meta name="author" content="K8s Mastery Guide">
+<meta property="og:type" content="website">
+<meta property="og:title" content="K8s Mastery Guide — From HPC/Slurm to Kubernetes">
+<meta property="og:description" content="A comprehensive, self-paced Kubernetes learning guide for bioinformaticians and HPC/Slurm admins. 34 sections covering installation through CRDs, Operators, GitOps, GPU workloads, and bioinformatics pipelines.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="K8s Mastery Guide — From HPC/Slurm to Kubernetes">
+<meta name="twitter:description" content="A comprehensive, self-paced Kubernetes learning guide for bioinformaticians and HPC/Slurm admins. 34 sections covering installation through CRDs, Operators, GitOps, GPU workloads, and bioinformatics pipelines.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⎈</text></svg>">
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+<link rel="dns-prefetch" href="https://fonts.gstatic.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Literata:opsz,wght@7..72,400;7..72,600;7..72,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -179,6 +190,20 @@ tbody tr:nth-child(even){background:var(--bg-section)}
   .menu-toggle{display:block}
   .dash-title{font-size:24px}
   .hdr-btn .kbd{display:none}
+}
+
+/* ══════ PRINT ══════ */
+@media print{
+  .header,.progress-bar,.sidebar,.sidebar-overlay,.palette-overlay,.menu-toggle,.hdr-btn,.filter-pills,.section-footer,.copy-btn,.chevron,.check-btn{display:none!important}
+  .main{margin-left:0;padding:0;max-width:100%}
+  .content{max-width:100%}
+  .section-block{border:1px solid #ccc;break-inside:avoid;margin-bottom:12px}
+  .section-body{display:block!important}
+  .section-header{pointer-events:none}
+  pre{white-space:pre-wrap;word-break:break-word;border:1px solid #ccc}
+  a{color:inherit;text-decoration:none}
+  body{background:#fff;color:#000;font-size:12pt}
+  .dash-title{font-size:22pt}
 }
 </style>
 </head>
