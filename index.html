@@ -46,7 +46,7 @@ body{font-family:'Outfit',system-ui,sans-serif;background:var(--bg);color:var(--
 /* ══════ HEADER ══════ */
 .header{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--header-h);background:var(--bg-surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 .menu-toggle{display:none;background:none;border:none;color:var(--text);font-size:20px;cursor:pointer;padding:4px}
-.logo{font-family:'Literata',serif;font-size:18px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px;white-space:nowrap;letter-spacing:-.3px}
+.logo{font-family:'Literata',serif;font-size:18px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px;white-space:nowrap;letter-spacing:-.3px;text-decoration:none;cursor:pointer}
 .logo-helm{font-size:22px}
 .header-spacer{flex:1}
 .hdr-btn{background:none;border:1px solid var(--border);color:var(--text-2);border-radius:8px;padding:5px 10px;cursor:pointer;font:13px 'Outfit',sans-serif;transition:all .15s;display:flex;align-items:center;gap:5px}
@@ -186,7 +186,7 @@ tbody tr:nth-child(even){background:var(--bg-section)}
 
 <header class="header">
   <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-  <div class="logo"><span class="logo-helm">⎈</span>K8s Mastery</div>
+  <a class="logo" href="#" onclick="event.preventDefault();window.scrollTo({top:0,behavior:'smooth'})"><span class="logo-helm">⎈</span>K8s Mastery</a>
   <div class="header-spacer"></div>
   <button class="hdr-btn" onclick="openPalette()" title="Search"><span>Search</span> <span class="kbd">⌘K</span></button>
   <button class="hdr-btn" onclick="toggleTheme()" id="themeBtn" title="Theme"><span id="themeIcon">☀</span></button>
