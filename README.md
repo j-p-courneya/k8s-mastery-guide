@@ -54,10 +54,10 @@ Includes setup commands, Calico CNI fixes specific to Jetstream2, storage strate
 The `index.html` file is fully self-contained. You can:
 
 - **Open it locally** — just double-click or `open index.html`
-- **Host on GitHub Pages** — it's live at the repo's Pages URL if enabled
+- **GitHub Pages (automatic)** — every push to `main` is automatically deployed via the included GitHub Actions workflow. Enable GitHub Pages in your repository settings (Settings → Pages → Source: GitHub Actions) and the site will be live at `https://<your-username>.github.io/k8s-mastery-guide/`.
 - **Serve it anywhere** — drop it on any web server, S3 bucket, or `python3 -m http.server`
 
-Features: sidebar navigation with search, dark/light theme toggle, reading progress bar, code copy buttons, and per-section completion tracking (saved in localStorage).
+Features: sidebar navigation with search, dark/light theme toggle, reading progress bar, code copy buttons, per-section completion tracking (saved in localStorage), and print/PDF-friendly styles.
 
 ## Who this is for
 
