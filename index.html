@@ -455,86 +455,83 @@ body {
 <!-- MAIN -->
 <main class="main">
   <div class="content" id="content">
-    <div style="text-align:center;padding:60px 0;color:var(--text-muted)">Loading guide...</div>
-  </div>
-</main>
-
-<!-- MARKDOWN SOURCE (embedded) -->
-<script id="mdSource" type="text/markdown">
-# Kubernetes Mastery Guide
-### From HPC Admin to K8s Super User
-
-> **Your advantage:** You already know Slurm, nodes, resource scheduling, and containers. This guide maps those concepts to Kubernetes and takes you all the way to expert.
-
----
-
-## Table of Contents
-
-0. [Prerequisites, System Requirements & Installation](#0-prerequisites-system-requirements--installation)
-1. [Mental Model: Slurm → Kubernetes](#1-mental-model-slurm--kubernetes)
-2. [Phase 1: Core Architecture](#2-phase-1-core-architecture)
-3. [Phase 2: kubectl Fluency](#3-phase-2-kubectl-fluency)
-4. [Phase 3: Workload Types Deep Dive](#4-phase-3-workload-types-deep-dive)
-5. [Phase 4: Networking & Services](#5-phase-4-networking--services)
-6. [Phase 5: Storage](#6-phase-5-storage)
-7. [Phase 6: Configuration & Secrets](#7-phase-6-configuration--secrets)
-8. [Phase 7: RBAC & Security](#8-phase-7-rbac--security)
-9. [Phase 8: Helm & Package Management](#9-phase-8-helm--package-management)
-10. [Phase 9: Autoscaling](#10-phase-9-autoscaling)
-11. [Phase 10: GPU & HPC Workloads](#11-phase-10-gpu--hpc-workloads)
-12. [Phase 11: ML Pipelines with Kubeflow](#12-phase-11-ml-pipelines-with-kubeflow)
-13. [Phase 12: Observability](#13-phase-12-observability)
-14. [Phase 13: Advanced — CRDs, Operators & GitOps](#14-phase-13-advanced--crds-operators--gitops)
-15. [Hands-On Labs](#15-hands-on-labs)
-16. [Cheat Sheet](#16-cheat-sheet)
-17. [Resources & Certification Path](#17-resources--certification-path)
-
----
-
-## 0. Prerequisites, System Requirements & Installation
-
-### What You Need Before Starting
-
-Since you're coming from HPC/Slurm, you likely already have most of these. Here's a quick checklist:
-
-- **Container runtime**: Docker Engine 26+ or Docker Desktop 4.37+ (you probably already have this)
-- **A terminal** you're comfortable with (bash/zsh)
-- **Basic YAML familiarity** — K8s is configured entirely in YAML
-- **Git** — for version-controlling your manifests and later for GitOps
-
-### System Requirements Overview
-
-The requirements differ based on whether you're learning locally, running a dev cluster, or deploying production.
-
-| Environment | CPUs | RAM | Disk | Notes |
-|---|---|---|---|---|
-| **minikube** (learning) | 2+ (4 recommended) | 2 GB min (4-8 GB recommended) | 20 GB+ | Single-node; runs in VM or container |
-| **kind** (testing/CI) | 2+ | 2 GB min per node | 10 GB+ | Runs K8s nodes as Docker containers |
-| **k3s / k3d** (lightweight) | 1+ | 512 MB min (2 GB recommended) | 5 GB+ | Lightweight K8s; great for edge/dev |
-| **kubeadm** (production) | 2+ per node | 2 GB+ per node | 50 GB+ | Full cluster; need separate control plane + workers |
-| **Managed cloud** (EKS/GKE/AKS) | Varies | Varies | Varies | Cloud provider handles control plane |
-
-> **Recommendation for learning:** Start with **minikube** on at least 4 CPUs and 8 GB RAM. This gives you room to run real workloads and GPU simulations without everything grinding to a halt. If your machine is constrained, **k3d** is the lightest option.
-
-### Required Ports (for kubeadm / bare-metal clusters)
-
-| Component | Port Range | Purpose |
-|---|---|---|
-| kube-apiserver | 6443 | API server (all communication) |
-| etcd | 2379-2380 | Cluster state store |
-| kubelet | 10250 | Node agent API |
-| kube-scheduler | 10259 | Scheduling decisions |
-| controller-manager | 10257 | Control loops |
-| NodePort Services | 30000-32767 | External access to services |
-
-### Installation: Choose Your Path
-
-#### Path A: minikube (Recommended for Learning)
-
-Best for: Getting started, following tutorials, CKA/CKAD exam prep.
-
-```bash
-# ── Step 1: Install Docker (if not already installed) ──
+    <h1>Kubernetes Mastery Guide</h1>
+<h3>From HPC Admin to K8s Super User</h3>
+<blockquote>
+<p><strong>Your advantage:</strong> You already know Slurm, nodes, resource scheduling, and containers. This guide maps those concepts to Kubernetes and takes you all the way to expert.</p>
+</blockquote>
+<hr>
+<h2>Table of Contents</h2>
+<h3>K8s Mastery Guide</h3>
+<ol start="0">
+<li><a href="#0-prerequisites-system-requirements--installation">Prerequisites, System Requirements &amp; Installation</a></li>
+<li><a href="#1-mental-model-slurm--kubernetes">Mental Model: Slurm → Kubernetes</a></li>
+<li><a href="#2-phase-1-core-architecture">Phase 1: Core Architecture</a></li>
+<li><a href="#3-phase-2-kubectl-fluency">Phase 2: kubectl Fluency</a></li>
+<li><a href="#4-phase-3-workload-types-deep-dive">Phase 3: Workload Types Deep Dive</a></li>
+<li><a href="#5-phase-4-networking--services">Phase 4: Networking &amp; Services</a></li>
+<li><a href="#6-phase-5-storage">Phase 5: Storage</a></li>
+<li><a href="#7-phase-6-configuration--secrets">Phase 6: Configuration &amp; Secrets</a></li>
+<li><a href="#8-phase-7-rbac--security">Phase 7: RBAC &amp; Security</a></li>
+<li><a href="#9-phase-8-helm--package-management">Phase 8: Helm &amp; Package Management</a></li>
+<li><a href="#10-phase-9-autoscaling">Phase 9: Autoscaling</a></li>
+<li><a href="#11-phase-10-gpu--hpc-workloads">Phase 10: GPU &amp; HPC Workloads</a></li>
+<li><a href="#12-phase-11-ml-pipelines-with-kubeflow">Phase 11: ML Pipelines with Kubeflow</a></li>
+<li><a href="#13-phase-12-observability">Phase 12: Observability</a></li>
+<li><a href="#14-phase-13-advanced--crds-operators--gitops">Phase 13: Advanced — CRDs, Operators &amp; GitOps</a></li>
+<li><a href="#15-hands-on-labs">Hands-On Labs</a></li>
+<li><a href="#16-cheat-sheet">Cheat Sheet</a></li>
+<li><a href="#17-resources--certification-path">Resources &amp; Certification Path</a></li>
+</ol>
+<h3>Jetstream2 Lab Plan</h3>
+<ol start="18">
+<li><a href="#18-jetstream2-quick-reference">Jetstream2 Quick Reference</a></li>
+<li><a href="#19-lab-architecture-options">Lab Architecture Options</a></li>
+<li><a href="#20-magnum-managed-k8s-on-jetstream2">Magnum (Managed K8s)</a></li>
+<li><a href="#21-su-budgeting-strategy">SU Budgeting Strategy</a></li>
+<li><a href="#22-recommended-learning-path-on-jetstream2">Jetstream2 Learning Path</a></li>
+<li><a href="#23-jetstream2-specific-tips">Jetstream2-Specific Tips</a></li>
+<li><a href="#24-reference-links">Jetstream2 Reference Links</a></li>
+</ol>
+<h3>Bioinformatics Exercises</h3>
+<ol start="25">
+<li><a href="#25-exercise-1-containerized-fastqc-at-scale">Exercise 1: FastQC at Scale</a></li>
+<li><a href="#26-exercise-2-nf-corernaseq-on-k8s-with-nextflow">Exercise 2: nf-core/rnaseq on K8s</a></li>
+<li><a href="#27-exercise-3-parallel-variant-calling-with-k8s-jobs">Exercise 3: Parallel Variant Calling</a></li>
+<li><a href="#28-exercise-4-persistent-bioinformatics-services">Exercise 4: Persistent Bioinformatics Services</a></li>
+<li><a href="#29-exercise-5-spatial-transcriptomics-processing-with-daemonsets-and-gpu-pods">Exercise 5: Spatial Transcriptomics &amp; GPU</a></li>
+<li><a href="#30-exercise-6-the-full-stack--microservices-for-a-bioinformatics-portal">Exercise 6: Full Stack Portal</a></li>
+<li><a href="#31-exercise-progression-map">Exercise Progression Map</a></li>
+</ol>
+<hr>
+<h2>0. Prerequisites, System Requirements &amp; Installation</h2>
+<h3>What You Need Before Starting</h3>
+<p>Since you&#39;re coming from HPC/Slurm, you likely already have most of these. Here&#39;s a quick checklist:</p>
+<ul>
+<li><strong>Container runtime</strong>: Docker Engine 26+ or Docker Desktop 4.37+ (you probably already have this)</li>
+<li><strong>A terminal</strong> you&#39;re comfortable with (bash/zsh)</li>
+<li><strong>Basic YAML familiarity</strong> — K8s is configured entirely in YAML</li>
+<li><strong>Git</strong> — for version-controlling your manifests and later for GitOps</li>
+</ul>
+<h3>System Requirements Overview</h3>
+<p>The requirements differ based on whether you&#39;re learning locally, running a dev cluster, or deploying production.</p>
+<div class="table-wrap"><table><thead><tr><th>Environment</th><th>CPUs</th><th>RAM</th><th>Disk</th><th>Notes</th></tr></thead><tbody><tr><td><strong>minikube</strong> (learning)</td><td>2+ (4 recommended)</td><td>2 GB min (4-8 GB recommended)</td><td>20 GB+</td><td>Single-node; runs in VM or container</td></tr>
+<tr><td><strong>kind</strong> (testing/CI)</td><td>2+</td><td>2 GB min per node</td><td>10 GB+</td><td>Runs K8s nodes as Docker containers</td></tr>
+<tr><td><strong>k3s / k3d</strong> (lightweight)</td><td>1+</td><td>512 MB min (2 GB recommended)</td><td>5 GB+</td><td>Lightweight K8s; great for edge/dev</td></tr>
+<tr><td><strong>kubeadm</strong> (production)</td><td>2+ per node</td><td>2 GB+ per node</td><td>50 GB+</td><td>Full cluster; need separate control plane + workers</td></tr>
+<tr><td><strong>Managed cloud</strong> (EKS/GKE/AKS)</td><td>Varies</td><td>Varies</td><td>Varies</td><td>Cloud provider handles control plane</td></tr></tbody></table></div><blockquote>
+<p><strong>Recommendation for learning:</strong> Start with <strong>minikube</strong> on at least 4 CPUs and 8 GB RAM. This gives you room to run real workloads and GPU simulations without everything grinding to a halt. If your machine is constrained, <strong>k3d</strong> is the lightest option.</p>
+</blockquote>
+<h3>Required Ports (for kubeadm / bare-metal clusters)</h3>
+<div class="table-wrap"><table><thead><tr><th>Component</th><th>Port Range</th><th>Purpose</th></tr></thead><tbody><tr><td>kube-apiserver</td><td>6443</td><td>API server (all communication)</td></tr>
+<tr><td>etcd</td><td>2379-2380</td><td>Cluster state store</td></tr>
+<tr><td>kubelet</td><td>10250</td><td>Node agent API</td></tr>
+<tr><td>kube-scheduler</td><td>10259</td><td>Scheduling decisions</td></tr>
+<tr><td>controller-manager</td><td>10257</td><td>Control loops</td></tr>
+<tr><td>NodePort Services</td><td>30000-32767</td><td>External access to services</td></tr></tbody></table></div><h3>Installation: Choose Your Path</h3>
+<h4>Path A: minikube (Recommended for Learning)</h4>
+<p>Best for: Getting started, following tutorials, CKA/CKAD exam prep.</p>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># ── Step 1: Install Docker (if not already installed) ──
 
 # Ubuntu/Debian
 sudo apt-get update
@@ -551,7 +548,7 @@ docker run hello-world
 
 # Linux (x86_64)
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube &amp;&amp; rm minikube-linux-amd64
 
 # macOS (Homebrew)
 brew install minikube
@@ -566,7 +563,7 @@ minikube version
 
 # Linux (x86_64) — downloads latest stable
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl && rm kubectl
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl &amp;&amp; rm kubectl
 
 # macOS (Homebrew)
 brew install kubectl
@@ -597,19 +594,13 @@ minikube addons enable dashboard         # Web UI
 minikube addons enable ingress           # Ingress controller
 
 # Open the dashboard (runs in browser)
-minikube dashboard
-```
-
-#### Path B: kind (Kubernetes IN Docker)
-
-Best for: CI/CD testing, multi-node clusters locally, faster startup than minikube.
-
-```bash
-# ── Install kind ──
+minikube dashboard</code></pre><h4>Path B: kind (Kubernetes IN Docker)</h4>
+<p>Best for: CI/CD testing, multi-node clusters locally, faster startup than minikube.</p>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># ── Install kind ──
 
 # Linux
-[ $(uname -m) = x86_64 ] && curl -Lo ./kind https://kind.sigs.k8s.io/dl/latest/kind-linux-amd64
-chmod +x ./kind && sudo mv ./kind /usr/local/bin/kind
+[ $(uname -m) = x86_64 ] &amp;&amp; curl -Lo ./kind https://kind.sigs.k8s.io/dl/latest/kind-linux-amd64
+chmod +x ./kind &amp;&amp; sudo mv ./kind /usr/local/bin/kind
 
 # macOS
 brew install kind
@@ -620,7 +611,7 @@ brew install kind
 kind create cluster --name dev
 
 # Multi-node cluster (create a config file first)
-cat <<EOF > kind-config.yaml
+cat &lt;&lt;EOF &gt; kind-config.yaml
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
@@ -635,20 +626,14 @@ kind create cluster --name multi-node --config kind-config.yaml
 kubectl get nodes
 # NAME                       STATUS   ROLES           AGE   VERSION
 # multi-node-control-plane   Ready    control-plane   1m    v1.35.0
-# multi-node-worker          Ready    <none>          1m    v1.35.0
-# multi-node-worker2         Ready    <none>          1m    v1.35.0
-# multi-node-worker3         Ready    <none>          1m    v1.35.0
+# multi-node-worker          Ready    &lt;none&gt;          1m    v1.35.0
+# multi-node-worker2         Ready    &lt;none&gt;          1m    v1.35.0
+# multi-node-worker3         Ready    &lt;none&gt;          1m    v1.35.0
 
 # Delete when done
-kind delete cluster --name multi-node
-```
-
-#### Path C: k3s / k3d (Lightweight)
-
-Best for: Edge computing, resource-constrained machines, quick experiments.
-
-```bash
-# ── k3s (direct install — runs as a system service) ──
+kind delete cluster --name multi-node</code></pre><h4>Path C: k3s / k3d (Lightweight)</h4>
+<p>Best for: Edge computing, resource-constrained machines, quick experiments.</p>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># ── k3s (direct install — runs as a system service) ──
 curl -sfL https://get.k3s.io | sh -
 
 # kubectl is automatically installed; kubeconfig at /etc/rancher/k3s/k3s.yaml
@@ -681,17 +666,10 @@ k3d cluster create dev \
 kubectl get nodes
 
 # Delete
-k3d cluster delete dev
-```
-
-#### Path D: kubeadm (Production / Bare-Metal)
-
-Best for: Production clusters, bare-metal HPC infrastructure, learning cluster administration deeply.
-
-This is the closest to how you'd set up a Slurm cluster — you configure each node individually.
-
-```bash
-# ══════════════════════════════════════════════════
+k3d cluster delete dev</code></pre><h4>Path D: kubeadm (Production / Bare-Metal)</h4>
+<p>Best for: Production clusters, bare-metal HPC infrastructure, learning cluster administration deeply.</p>
+<p>This is the closest to how you&#39;d set up a Slurm cluster — you configure each node individually.</p>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># ══════════════════════════════════════════════════
 # Run on ALL nodes (control plane + workers)
 # ══════════════════════════════════════════════════
 
@@ -700,7 +678,7 @@ sudo swapoff -a
 sudo sed -i '/ swap / s/^/#/' /etc/fstab
 
 # Load required kernel modules
-cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+cat &lt;&lt;EOF | sudo tee /etc/modules-load.d/k8s.conf
 overlay
 br_netfilter
 EOF
@@ -708,7 +686,7 @@ sudo modprobe overlay
 sudo modprobe br_netfilter
 
 # Set required sysctl params
-cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+cat &lt;&lt;EOF | sudo tee /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-iptables  = 1
 net.bridge.bridge-nf-call-ip6tables = 1
 net.ipv4.ip_forward                 = 1
@@ -741,7 +719,7 @@ sudo apt-mark hold kubelet kubeadm kubectl   # Prevent auto-upgrade
 # Initialize the cluster
 sudo kubeadm init \
   --pod-network-cidr=192.168.0.0/16 \
-  --control-plane-endpoint=<CONTROL_PLANE_IP>:6443
+  --control-plane-endpoint=&lt;CONTROL_PLANE_IP&gt;:6443
 
 # Set up kubeconfig for your user
 mkdir -p $HOME/.kube
@@ -753,16 +731,16 @@ kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/
 
 # Get the join command (save this for worker nodes!)
 kubeadm token create --print-join-command
-# Output: kubeadm join <IP>:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash>
+# Output: kubeadm join &lt;IP&gt;:6443 --token &lt;token&gt; --discovery-token-ca-cert-hash sha256:&lt;hash&gt;
 
 # ══════════════════════════════════════════════════
 # Run on EACH WORKER node
 # ══════════════════════════════════════════════════
 
 # Paste the join command from above
-sudo kubeadm join <CONTROL_PLANE_IP>:6443 \
-  --token <token> \
-  --discovery-token-ca-cert-hash sha256:<hash>
+sudo kubeadm join &lt;CONTROL_PLANE_IP&gt;:6443 \
+  --token &lt;token&gt; \
+  --discovery-token-ca-cert-hash sha256:&lt;hash&gt;
 
 # ══════════════════════════════════════════════════
 # Back on CONTROL PLANE — verify
@@ -771,46 +749,30 @@ sudo kubeadm join <CONTROL_PLANE_IP>:6443 \
 kubectl get nodes
 # NAME        STATUS   ROLES           AGE   VERSION
 # master-01   Ready    control-plane   5m    v1.35.0
-# worker-01   Ready    <none>          2m    v1.35.0
-# worker-02   Ready    <none>          2m    v1.35.0
+# worker-01   Ready    &lt;none&gt;          2m    v1.35.0
+# worker-02   Ready    &lt;none&gt;          2m    v1.35.0
 
 # Label worker nodes (like setting up Slurm partitions)
 kubectl label node worker-01 node-role.kubernetes.io/worker=worker
-kubectl label node worker-02 node-role.kubernetes.io/worker=worker
-```
-
-#### Path E: Managed Cloud Services
-
-If you just want a cluster without managing infrastructure:
-
-| Provider | Service | Quick Start |
-|---|---|---|
-| AWS | **EKS** | `eksctl create cluster --name dev --region us-west-2` |
-| Google Cloud | **GKE** | `gcloud container clusters create dev --zone us-central1-a` |
-| Azure | **AKS** | `az aks create --resource-group myRG --name dev` |
-| DigitalOcean | **DOKS** | Via web console or `doctl` CLI |
-
-> These handle the control plane for you — you only manage worker nodes and workloads. Great for production, but for learning the internals, use minikube or kubeadm.
-
-### Install Helm (You'll Need This Soon)
-
-```bash
-# Linux / macOS
+kubectl label node worker-02 node-role.kubernetes.io/worker=worker</code></pre><h4>Path E: Managed Cloud Services</h4>
+<p>If you just want a cluster without managing infrastructure:</p>
+<div class="table-wrap"><table><thead><tr><th>Provider</th><th>Service</th><th>Quick Start</th></tr></thead><tbody><tr><td>AWS</td><td><strong>EKS</strong></td><td><code>eksctl create cluster --name dev --region us-west-2</code></td></tr>
+<tr><td>Google Cloud</td><td><strong>GKE</strong></td><td><code>gcloud container clusters create dev --zone us-central1-a</code></td></tr>
+<tr><td>Azure</td><td><strong>AKS</strong></td><td><code>az aks create --resource-group myRG --name dev</code></td></tr>
+<tr><td>DigitalOcean</td><td><strong>DOKS</strong></td><td>Via web console or <code>doctl</code> CLI</td></tr></tbody></table></div><blockquote>
+<p>These handle the control plane for you — you only manage worker nodes and workloads. Great for production, but for learning the internals, use minikube or kubeadm.</p>
+</blockquote>
+<h3>Install Helm (You&#39;ll Need This Soon)</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Linux / macOS
 curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
 # macOS (Homebrew)
 brew install helm
 
 # Verify
-helm version
-```
-
-### Post-Installation Checklist
-
-After any installation method, verify your environment:
-
-```bash
-# 1. Cluster is running
+helm version</code></pre><h3>Post-Installation Checklist</h3>
+<p>After any installation method, verify your environment:</p>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># 1. Cluster is running
 kubectl cluster-info
 
 # 2. Nodes are Ready
@@ -832,21 +794,16 @@ kubectl delete pod dns-test
 
 # 6. kubectl autocomplete is set up (huge productivity boost)
 # bash
-echo 'source <(kubectl completion bash)' >> ~/.bashrc
-echo 'alias k=kubectl' >> ~/.bashrc
-echo 'complete -o default -F __start_kubectl k' >> ~/.bashrc
+echo 'source &lt;(kubectl completion bash)' &gt;&gt; ~/.bashrc
+echo 'alias k=kubectl' &gt;&gt; ~/.bashrc
+echo 'complete -o default -F __start_kubectl k' &gt;&gt; ~/.bashrc
 source ~/.bashrc
 
 # zsh
-echo 'source <(kubectl completion zsh)' >> ~/.zshrc
-echo 'alias k=kubectl' >> ~/.zshrc
-source ~/.zshrc
-```
-
-### Which Path Should You Choose?
-
-```
-Are you learning K8s for the first time?
+echo 'source &lt;(kubectl completion zsh)' &gt;&gt; ~/.zshrc
+echo 'alias k=kubectl' &gt;&gt; ~/.zshrc
+source ~/.zshrc</code></pre><h3>Which Path Should You Choose?</h3>
+<pre style="position:relative"><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>Are you learning K8s for the first time?
 ├── Yes → minikube (Path A)
 │         Easiest setup, great addon ecosystem, CKA exam uses similar env
 │
@@ -859,44 +816,29 @@ Are you learning K8s for the first time?
 │       (Most similar to your Slurm cluster setup experience)
 │
 └── Just want workloads running ASAP?
-    └── Managed cloud (Path E) — EKS, GKE, or AKS
-```
-
----
-
-## 1. Mental Model: Slurm → Kubernetes
-
-This is the single most useful table for your transition. Once this clicks, everything else accelerates.
-
-| Slurm Concept | Kubernetes Equivalent | Notes |
-|---|---|---|
-| `slurmctld` (controller) | **kube-apiserver + controller-manager + scheduler** | K8s splits the control plane into components |
-| `slurmd` (node daemon) | **kubelet** | Runs on every worker node |
-| Node / compute node | **Node** | Same concept, different management |
-| Partition | **Namespace** (logical) or **Node Pool** (physical) | Namespaces isolate resources; node pools group similar hardware |
-| Job (`sbatch`) | **Job** or **Pod** | Pod = smallest unit; Job = run-to-completion |
-| Job Array | **Job with parallelism** | `spec.parallelism` and `spec.completions` |
-| `squeue` | `kubectl get pods` | See what's running |
-| `scontrol show job` | `kubectl describe pod` | Detailed status |
-| `sinfo` | `kubectl get nodes` | Node status |
-| `sacct` | Prometheus / metrics-server | Resource usage history |
-| `--gres=gpu:1` | `resources.limits: nvidia.com/gpu: 1` | GPU requests |
-| `--constraint` / features | **nodeSelector** / **nodeAffinity** | Place workloads on specific nodes |
-| `--exclusive` | **Taints & Tolerations** | Reserve nodes for specific workloads |
-| QOS / priority | **PriorityClass** | Preemption support built in |
-| Module system (Lmod) | **Container images** | Each image bundles its own dependencies |
-| Shared filesystem (Lustre/GPFS) | **PersistentVolume (PV)** | Can mount NFS, Ceph, cloud storage, etc. |
-
-**Key mindset shift:** In Slurm, you submit jobs and wait. In Kubernetes, you declare desired state and the system continuously reconciles reality to match. This is called the **declarative model** — it's the most important concept in K8s.
-
----
-
-## 2. Phase 1: Core Architecture
-
-### Control Plane Components
-
-```
-┌─────────────────────── Control Plane ───────────────────────┐
+    └── Managed cloud (Path E) — EKS, GKE, or AKS</code></pre><hr>
+<h2>1. Mental Model: Slurm → Kubernetes</h2>
+<p>This is the single most useful table for your transition. Once this clicks, everything else accelerates.</p>
+<div class="table-wrap"><table><thead><tr><th>Slurm Concept</th><th>Kubernetes Equivalent</th><th>Notes</th></tr></thead><tbody><tr><td><code>slurmctld</code> (controller)</td><td><strong>kube-apiserver + controller-manager + scheduler</strong></td><td>K8s splits the control plane into components</td></tr>
+<tr><td><code>slurmd</code> (node daemon)</td><td><strong>kubelet</strong></td><td>Runs on every worker node</td></tr>
+<tr><td>Node / compute node</td><td><strong>Node</strong></td><td>Same concept, different management</td></tr>
+<tr><td>Partition</td><td><strong>Namespace</strong> (logical) or <strong>Node Pool</strong> (physical)</td><td>Namespaces isolate resources; node pools group similar hardware</td></tr>
+<tr><td>Job (<code>sbatch</code>)</td><td><strong>Job</strong> or <strong>Pod</strong></td><td>Pod = smallest unit; Job = run-to-completion</td></tr>
+<tr><td>Job Array</td><td><strong>Job with parallelism</strong></td><td><code>spec.parallelism</code> and <code>spec.completions</code></td></tr>
+<tr><td><code>squeue</code></td><td><code>kubectl get pods</code></td><td>See what's running</td></tr>
+<tr><td><code>scontrol show job</code></td><td><code>kubectl describe pod</code></td><td>Detailed status</td></tr>
+<tr><td><code>sinfo</code></td><td><code>kubectl get nodes</code></td><td>Node status</td></tr>
+<tr><td><code>sacct</code></td><td>Prometheus / metrics-server</td><td>Resource usage history</td></tr>
+<tr><td><code>--gres=gpu:1</code></td><td><code>resources.limits: nvidia.com/gpu: 1</code></td><td>GPU requests</td></tr>
+<tr><td><code>--constraint</code> / features</td><td><strong>nodeSelector</strong> / <strong>nodeAffinity</strong></td><td>Place workloads on specific nodes</td></tr>
+<tr><td><code>--exclusive</code></td><td><strong>Taints & Tolerations</strong></td><td>Reserve nodes for specific workloads</td></tr>
+<tr><td>QOS / priority</td><td><strong>PriorityClass</strong></td><td>Preemption support built in</td></tr>
+<tr><td>Module system (Lmod)</td><td><strong>Container images</strong></td><td>Each image bundles its own dependencies</td></tr>
+<tr><td>Shared filesystem (Lustre/GPFS)</td><td><strong>PersistentVolume (PV)</strong></td><td>Can mount NFS, Ceph, cloud storage, etc.</td></tr></tbody></table></div><p><strong>Key mindset shift:</strong> In Slurm, you submit jobs and wait. In Kubernetes, you declare desired state and the system continuously reconciles reality to match. This is called the <strong>declarative model</strong> — it&#39;s the most important concept in K8s.</p>
+<hr>
+<h2>2. Phase 1: Core Architecture</h2>
+<h3>Control Plane Components</h3>
+<pre style="position:relative"><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>┌─────────────────────── Control Plane ───────────────────────┐
 │                                                              │
 │  kube-apiserver     ← All communication goes through here    │
 │       │                                                      │
@@ -916,25 +858,14 @@ This is the single most useful table for your transition. Once this clicks, ever
 │  container-runtime (containerd)   │
 │  [pods running here]              │
 │                                   │
-└───────────────────────────────────┘
-```
-
-### The Core Objects
-
-**Pod** — The atomic unit. One or more containers sharing network and storage. Like a single Slurm job step.
-
-**ReplicaSet** — Ensures N copies of a pod are running. You rarely create these directly.
-
-**Deployment** — Manages ReplicaSets. Handles rolling updates, rollbacks. This is what you use 90% of the time for stateless apps.
-
-**Service** — Stable network endpoint for a set of pods. Pods come and go; Services give them a permanent address.
-
-**Namespace** — Logical isolation boundary (like Slurm partitions but for access control and resource quotas).
-
-### How Declarative State Works
-
-```yaml
-# You write this (desired state):
+└───────────────────────────────────┘</code></pre><h3>The Core Objects</h3>
+<p><strong>Pod</strong> — The atomic unit. One or more containers sharing network and storage. Like a single Slurm job step.</p>
+<p><strong>ReplicaSet</strong> — Ensures N copies of a pod are running. You rarely create these directly.</p>
+<p><strong>Deployment</strong> — Manages ReplicaSets. Handles rolling updates, rollbacks. This is what you use 90% of the time for stateless apps.</p>
+<p><strong>Service</strong> — Stable network endpoint for a set of pods. Pods come and go; Services give them a permanent address.</p>
+<p><strong>Namespace</strong> — Logical isolation boundary (like Slurm partitions but for access control and resource quotas).</p>
+<h3>How Declarative State Works</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># You write this (desired state):
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -958,39 +889,30 @@ spec:
             memory: "128Mi"
           limits:        # Maximum resources (hard ceiling)
             cpu: "500m"
-            memory: "256Mi"
-```
-
-K8s then continuously ensures exactly 3 pods are running. If one dies, it spawns another. If you change the image tag, it performs a rolling update.
-
----
-
-## 3. Phase 2: kubectl Fluency
-
-`kubectl` is your primary interface — like `scontrol`, `squeue`, and `sbatch` rolled into one.
-
-### Essential Commands (Muscle Memory)
-
-```bash
-# Cluster info
+            memory: "256Mi"</code></pre><p>K8s then continuously ensures exactly 3 pods are running. If one dies, it spawns another. If you change the image tag, it performs a rolling update.</p>
+<hr>
+<h2>3. Phase 2: kubectl Fluency</h2>
+<p><code>kubectl</code> is your primary interface — like <code>scontrol</code>, <code>squeue</code>, and <code>sbatch</code> rolled into one.</p>
+<h3>Essential Commands (Muscle Memory)</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Cluster info
 kubectl cluster-info
 kubectl get nodes -o wide            # Like sinfo
-kubectl describe node <node-name>    # Like scontrol show node
+kubectl describe node &lt;node-name&gt;    # Like scontrol show node
 
 # Working with pods (like squeue / scontrol show job)
 kubectl get pods                     # All pods in current namespace
 kubectl get pods -A                  # All pods, ALL namespaces
 kubectl get pods -o wide             # Show node placement
 kubectl get pods -w                  # Watch (live updates)
-kubectl describe pod <name>          # Detailed info + events
-kubectl logs <pod>                   # stdout/stderr (like slurm output files)
-kubectl logs <pod> -f                # Follow (tail -f)
-kubectl logs <pod> -c <container>    # Specific container in multi-container pod
-kubectl logs <pod> --previous        # Logs from crashed container
+kubectl describe pod &lt;name&gt;          # Detailed info + events
+kubectl logs &lt;pod&gt;                   # stdout/stderr (like slurm output files)
+kubectl logs &lt;pod&gt; -f                # Follow (tail -f)
+kubectl logs &lt;pod&gt; -c &lt;container&gt;    # Specific container in multi-container pod
+kubectl logs &lt;pod&gt; --previous        # Logs from crashed container
 
 # Interactive access (like ssh into a compute node)
-kubectl exec -it <pod> -- /bin/bash
-kubectl exec -it <pod> -c <container> -- /bin/sh
+kubectl exec -it &lt;pod&gt; -- /bin/bash
+kubectl exec -it &lt;pod&gt; -c &lt;container&gt; -- /bin/sh
 
 # Apply manifests (like sbatch)
 kubectl apply -f deployment.yaml     # Create or update
@@ -1012,13 +934,8 @@ kubectl rollout undo deployment/my-app                  # Instant rollback!
 
 # Resource usage (like sacct)
 kubectl top nodes
-kubectl top pods
-```
-
-### Power User kubectl Tips
-
-```bash
-# Aliases — put these in your .bashrc
+kubectl top pods</code></pre><h3>Power User kubectl Tips</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Aliases — put these in your .bashrc
 alias k='kubectl'
 alias kgp='kubectl get pods'
 alias kgn='kubectl get nodes'
@@ -1045,13 +962,8 @@ kubectl config use-context my-cluster
 kubectl config set-context --current --namespace=my-namespace
 
 # Force delete stuck pods
-kubectl delete pod <name> --grace-period=0 --force
-```
-
-### 🔬 Lab: kubectl Exploration
-
-```bash
-# 1. Set up a local cluster (pick one):
+kubectl delete pod &lt;name&gt; --grace-period=0 --force</code></pre><h3>🔬 Lab: kubectl Exploration</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># 1. Set up a local cluster (pick one):
 #    - minikube start --cpus=4 --memory=8g
 #    - kind create cluster
 #    - k3d cluster create mycluster
@@ -1063,38 +975,26 @@ kubectl create deployment hello --image=nginx:1.25 --replicas=3
 kubectl get all
 kubectl describe deployment hello
 kubectl get pods -o wide
-kubectl logs <one-of-the-pods>
-kubectl exec -it <one-of-the-pods> -- cat /etc/nginx/nginx.conf
+kubectl logs &lt;one-of-the-pods&gt;
+kubectl exec -it &lt;one-of-the-pods&gt; -- cat /etc/nginx/nginx.conf
 
 # 4. Break it and watch recovery
-kubectl delete pod <one-of-the-pods>   # Watch: a new one appears!
+kubectl delete pod &lt;one-of-the-pods&gt;   # Watch: a new one appears!
 kubectl get pods -w                     # See the replacement spawn
 
 # 5. Scale and update
 kubectl scale deployment hello --replicas=5
 kubectl set image deployment/hello nginx=nginx:1.26
-kubectl rollout status deployment/hello
-```
-
----
-
-## 4. Phase 3: Workload Types Deep Dive
-
-### When to Use What
-
-| Workload Type | Slurm Analogy | Use Case |
-|---|---|---|
-| **Deployment** | Long-running service | Web servers, APIs, microservices |
-| **StatefulSet** | — | Databases, anything needing stable identity/storage |
-| **DaemonSet** | Node-level daemons | Monitoring agents, log collectors, GPU drivers |
-| **Job** | `sbatch` (single run) | Batch processing, data migration, one-off tasks |
-| **CronJob** | `cron` + `sbatch` | Scheduled tasks, periodic cleanup |
-| **ReplicaSet** | — | Managed by Deployments; rarely create directly |
-
-### Job (Your Bread and Butter from HPC)
-
-```yaml
-apiVersion: batch/v1
+kubectl rollout status deployment/hello</code></pre><hr>
+<h2>4. Phase 3: Workload Types Deep Dive</h2>
+<h3>When to Use What</h3>
+<div class="table-wrap"><table><thead><tr><th>Workload Type</th><th>Slurm Analogy</th><th>Use Case</th></tr></thead><tbody><tr><td><strong>Deployment</strong></td><td>Long-running service</td><td>Web servers, APIs, microservices</td></tr>
+<tr><td><strong>StatefulSet</strong></td><td>—</td><td>Databases, anything needing stable identity/storage</td></tr>
+<tr><td><strong>DaemonSet</strong></td><td>Node-level daemons</td><td>Monitoring agents, log collectors, GPU drivers</td></tr>
+<tr><td><strong>Job</strong></td><td><code>sbatch</code> (single run)</td><td>Batch processing, data migration, one-off tasks</td></tr>
+<tr><td><strong>CronJob</strong></td><td><code>cron</code> + <code>sbatch</code></td><td>Scheduled tasks, periodic cleanup</td></tr>
+<tr><td><strong>ReplicaSet</strong></td><td>—</td><td>Managed by Deployments; rarely create directly</td></tr></tbody></table></div><h3>Job (Your Bread and Butter from HPC)</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>apiVersion: batch/v1
 kind: Job
 metadata:
   name: data-processing
@@ -1117,13 +1017,8 @@ spec:
           limits:
             cpu: "4"
             memory: "8Gi"
-            nvidia.com/gpu: 1   # Request a GPU
-```
-
-### StatefulSet (For Stateful Services)
-
-```yaml
-apiVersion: apps/v1
+            nvidia.com/gpu: 1   # Request a GPU</code></pre><h3>StatefulSet (For Stateful Services)</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: postgres
@@ -1151,15 +1046,9 @@ spec:
       accessModes: ["ReadWriteOnce"]
       resources:
         requests:
-          storage: 100Gi
-```
-
-Key properties of StatefulSets: pods get stable names (`postgres-0`, `postgres-1`, `postgres-2`), ordered startup/shutdown, and each pod gets its own persistent storage.
-
-### DaemonSet (Runs on Every Node)
-
-```yaml
-apiVersion: apps/v1
+          storage: 100Gi</code></pre><p>Key properties of StatefulSets: pods get stable names (<code>postgres-0</code>, <code>postgres-1</code>, <code>postgres-2</code>), ordered startup/shutdown, and each pod gets its own persistent storage.</p>
+<h3>DaemonSet (Runs on Every Node)</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: node-monitor
@@ -1178,17 +1067,10 @@ spec:
       - name: monitor
         image: prom/node-exporter:latest
         ports:
-        - containerPort: 9100
-```
-
----
-
-## 5. Phase 4: Networking & Services
-
-### Service Types
-
-```
-┌─────────────────────────────────────────────────────┐
+        - containerPort: 9100</code></pre><hr>
+<h2>5. Phase 4: Networking &amp; Services</h2>
+<h3>Service Types</h3>
+<pre style="position:relative"><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>┌─────────────────────────────────────────────────────┐
 │                                                      │
 │  ClusterIP (default)                                 │
 │  → Internal only. Pods can reach it, outside can't.  │
@@ -1205,13 +1087,8 @@ spec:
 │  ExternalName                                        │
 │  → CNAME alias to an external service.               │
 │                                                      │
-└─────────────────────────────────────────────────────┘
-```
-
-### Service Example
-
-```yaml
-apiVersion: v1
+└─────────────────────────────────────────────────────┘</code></pre><h3>Service Example</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>apiVersion: v1
 kind: Service
 metadata:
   name: my-app-service
@@ -1222,15 +1099,9 @@ spec:
   ports:
   - port: 80                 # Service port
     targetPort: 8080         # Container port
-    protocol: TCP
-```
-
-### Ingress (HTTP/HTTPS Routing)
-
-Ingress sits in front of Services and routes external HTTP traffic:
-
-```yaml
-apiVersion: networking.k8s.io/v1
+    protocol: TCP</code></pre><h3>Ingress (HTTP/HTTPS Routing)</h3>
+<p>Ingress sits in front of Services and routes external HTTP traffic:</p>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: my-ingress
@@ -1259,13 +1130,8 @@ spec:
   tls:
   - hosts:
     - myapp.example.com
-    secretName: myapp-tls
-```
-
-### Network Policies (Firewall Rules for Pods)
-
-```yaml
-apiVersion: networking.k8s.io/v1
+    secretName: myapp-tls</code></pre><h3>Network Policies (Firewall Rules for Pods)</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: allow-only-frontend
@@ -1283,43 +1149,25 @@ spec:
           app: frontend       # Only frontend pods can talk to the API
     ports:
     - protocol: TCP
-      port: 8080
-```
-
-### DNS in Kubernetes
-
-Every Service gets a DNS name: `<service-name>.<namespace>.svc.cluster.local`
-
-```bash
-# From any pod, you can reach services by name:
+      port: 8080</code></pre><h3>DNS in Kubernetes</h3>
+<p>Every Service gets a DNS name: <code>&lt;service-name&gt;.&lt;namespace&gt;.svc.cluster.local</code></p>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># From any pod, you can reach services by name:
 curl http://my-app-service                          # Same namespace
 curl http://my-app-service.production               # Cross-namespace
 curl http://my-app-service.production.svc.cluster.local  # Fully qualified
 
 # StatefulSet pods also get individual DNS:
-# postgres-0.postgres.default.svc.cluster.local
-```
-
----
-
-## 6. Phase 5: Storage
-
-### Storage Hierarchy
-
-```
-StorageClass          ← Defines HOW storage is provisioned (SSD, HDD, NFS...)
+# postgres-0.postgres.default.svc.cluster.local</code></pre><hr>
+<h2>6. Phase 5: Storage</h2>
+<h3>Storage Hierarchy</h3>
+<pre style="position:relative"><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>StorageClass          ← Defines HOW storage is provisioned (SSD, HDD, NFS...)
     │
 PersistentVolume (PV) ← A piece of actual storage (like a disk)
     │
 PersistentVolumeClaim (PVC) ← A request for storage by a pod
     │
-Pod volumeMount       ← Where the storage appears inside the container
-```
-
-### Common Patterns
-
-```yaml
-# PersistentVolumeClaim — request storage
+Pod volumeMount       ← Where the storage appears inside the container</code></pre><h3>Common Patterns</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># PersistentVolumeClaim — request storage
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -1355,13 +1203,8 @@ spec:
       claimName: training-data
   - name: scratch
     emptyDir:              # Ephemeral — deleted when pod dies
-      sizeLimit: 50Gi      # Can use memory: emptyDir: { medium: Memory }
-```
-
-### For HPC: Mounting Shared Filesystems
-
-```yaml
-# Mount an existing NFS share (like Lustre/GPFS access)
+      sizeLimit: 50Gi      # Can use memory: emptyDir: { medium: Memory }</code></pre><h3>For HPC: Mounting Shared Filesystems</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Mount an existing NFS share (like Lustre/GPFS access)
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -1374,17 +1217,10 @@ spec:
   nfs:
     server: nfs-server.example.com
     path: /exports/shared
-  persistentVolumeReclaimPolicy: Retain
-```
-
----
-
-## 7. Phase 6: Configuration & Secrets
-
-### ConfigMaps (Non-Sensitive Config)
-
-```yaml
-apiVersion: v1
+  persistentVolumeReclaimPolicy: Retain</code></pre><hr>
+<h2>7. Phase 6: Configuration &amp; Secrets</h2>
+<h3>ConfigMaps (Non-Sensitive Config)</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>apiVersion: v1
 kind: ConfigMap
 metadata:
   name: app-config
@@ -1410,13 +1246,8 @@ spec:
   volumes:
   - name: config-vol
     configMap:
-      name: app-config
-```
-
-### Secrets (Sensitive Data)
-
-```bash
-# Create from command line
+      name: app-config</code></pre><h3>Secrets (Sensitive Data)</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Create from command line
 kubectl create secret generic db-creds \
   --from-literal=username=admin \
   --from-literal=password='s3cur3p@ss!'
@@ -1424,11 +1255,7 @@ kubectl create secret generic db-creds \
 # Create from files
 kubectl create secret tls my-tls \
   --cert=tls.crt \
-  --key=tls.key
-```
-
-```yaml
-# Using secrets in pods
+  --key=tls.key</code></pre><pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Using secrets in pods
 spec:
   containers:
   - name: app
@@ -1445,31 +1272,20 @@ spec:
   volumes:
   - name: tls-certs
     secret:
-      secretName: my-tls
-```
-
-> **Important:** K8s Secrets are base64-encoded, not encrypted at rest by default. For production, enable encryption at rest or use external secret managers (Vault, AWS Secrets Manager, etc.).
-
----
-
-## 8. Phase 7: RBAC & Security
-
-### RBAC Model
-
-```
-User / ServiceAccount
+      secretName: my-tls</code></pre><blockquote>
+<p><strong>Important:</strong> K8s Secrets are base64-encoded, not encrypted at rest by default. For production, enable encryption at rest or use external secret managers (Vault, AWS Secrets Manager, etc.).</p>
+</blockquote>
+<hr>
+<h2>8. Phase 7: RBAC &amp; Security</h2>
+<h3>RBAC Model</h3>
+<pre style="position:relative"><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>User / ServiceAccount
     ↓ bound via
 RoleBinding (namespace-scoped) or ClusterRoleBinding (cluster-wide)
     ↓ references
 Role (namespace-scoped) or ClusterRole (cluster-wide)
     ↓ contains
-Rules: apiGroups + resources + verbs
-```
-
-### Example: Read-Only Namespace Access
-
-```yaml
-apiVersion: rbac.authorization.k8s.io/v1
+Rules: apiGroups + resources + verbs</code></pre><h3>Example: Read-Only Namespace Access</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: pod-reader
@@ -1495,13 +1311,8 @@ subjects:
 roleRef:
   kind: Role
   name: pod-reader
-  apiGroup: rbac.authorization.k8s.io
-```
-
-### Pod Security (Hardening Containers)
-
-```yaml
-spec:
+  apiGroup: rbac.authorization.k8s.io</code></pre><h3>Pod Security (Hardening Containers)</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>spec:
   securityContext:
     runAsNonRoot: true
     runAsUser: 1000
@@ -1516,19 +1327,11 @@ spec:
     resources:
       limits:
         cpu: "1"
-        memory: "512Mi"
-```
-
----
-
-## 9. Phase 8: Helm & Package Management
-
-Helm = package manager for Kubernetes (like `apt` for Ubuntu or `conda` for Python).
-
-### Core Concepts
-
-```bash
-# Add a chart repository
+        memory: "512Mi"</code></pre><hr>
+<h2>9. Phase 8: Helm &amp; Package Management</h2>
+<p>Helm = package manager for Kubernetes (like <code>apt</code> for Ubuntu or <code>conda</code> for Python).</p>
+<h3>Core Concepts</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Add a chart repository
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update
 
@@ -1556,13 +1359,8 @@ helm rollback my-prometheus 1    # Revision number
 helm uninstall my-prometheus -n monitoring
 
 # See what a chart would render (debug)
-helm template my-release bitnami/kube-prometheus -f values.yaml
-```
-
-### Creating Your Own Chart
-
-```bash
-helm create my-app
+helm template my-release bitnami/kube-prometheus -f values.yaml</code></pre><h3>Creating Your Own Chart</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>helm create my-app
 
 my-app/
 ├── Chart.yaml          # Metadata
@@ -1573,17 +1371,10 @@ my-app/
 │   ├── ingress.yaml
 │   ├── _helpers.tpl    # Template functions
 │   └── NOTES.txt       # Post-install message
-└── charts/             # Dependencies
-```
-
----
-
-## 10. Phase 9: Autoscaling
-
-### Horizontal Pod Autoscaler (HPA)
-
-```yaml
-apiVersion: autoscaling/v2
+└── charts/             # Dependencies</code></pre><hr>
+<h2>10. Phase 9: Autoscaling</h2>
+<h3>Horizontal Pod Autoscaler (HPA)</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: my-app-hpa
@@ -1609,42 +1400,21 @@ spec:
         averageUtilization: 80
   behavior:
     scaleDown:
-      stabilizationWindowSeconds: 300    # Wait 5 min before scaling down
-```
-
-### Vertical Pod Autoscaler (VPA)
-
-Adjusts CPU/memory requests per pod instead of changing replica count. Useful for workloads that can't scale horizontally.
-
-### Cluster Autoscaler
-
-Adds/removes nodes from the cluster. Works with cloud providers (EKS, GKE, AKS) to provision new VMs when pods can't be scheduled.
-
-```
-Pod unschedulable (no room) → Cluster Autoscaler adds node → Pod gets scheduled
-Node underutilized → Cluster Autoscaler removes node → Saves cost
-```
-
----
-
-## 11. Phase 10: GPU & HPC Workloads
-
-This is where your HPC background really pays off.
-
-### NVIDIA Device Plugin Setup
-
-```bash
-# Install the NVIDIA device plugin (DaemonSet)
+      stabilizationWindowSeconds: 300    # Wait 5 min before scaling down</code></pre><h3>Vertical Pod Autoscaler (VPA)</h3>
+<p>Adjusts CPU/memory requests per pod instead of changing replica count. Useful for workloads that can&#39;t scale horizontally.</p>
+<h3>Cluster Autoscaler</h3>
+<p>Adds/removes nodes from the cluster. Works with cloud providers (EKS, GKE, AKS) to provision new VMs when pods can&#39;t be scheduled.</p>
+<pre style="position:relative"><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>Pod unschedulable (no room) → Cluster Autoscaler adds node → Pod gets scheduled
+Node underutilized → Cluster Autoscaler removes node → Saves cost</code></pre><hr>
+<h2>11. Phase 10: GPU &amp; HPC Workloads</h2>
+<p>This is where your HPC background really pays off.</p>
+<h3>NVIDIA Device Plugin Setup</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Install the NVIDIA device plugin (DaemonSet)
 kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.14.3/nvidia-device-plugin.yml
 
 # Verify GPUs are detected
-kubectl get nodes -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.capacity.nvidia\.com/gpu}{"\n"}{end}'
-```
-
-### GPU Pod Example
-
-```yaml
-apiVersion: v1
+kubectl get nodes -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.capacity.nvidia\.com/gpu}{"\n"}{end}'</code></pre><h3>GPU Pod Example</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>apiVersion: v1
 kind: Pod
 metadata:
   name: gpu-training
@@ -1674,13 +1444,8 @@ spec:
   - name: dshm
     emptyDir:
       medium: Memory
-      sizeLimit: "16Gi"         # Shared memory for DataLoader workers
-```
-
-### Node Affinity (Target Specific Hardware)
-
-```yaml
-# Like Slurm's --constraint or --nodelist
+      sizeLimit: "16Gi"         # Shared memory for DataLoader workers</code></pre><h3>Node Affinity (Target Specific Hardware)</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Like Slurm's --constraint or --nodelist
 spec:
   affinity:
     nodeAffinity:
@@ -1696,24 +1461,13 @@ spec:
   - key: "gpu-type"
     operator: "Equal"
     value: "h200"
-    effect: "NoSchedule"
-```
-
-### Taints and Tolerations (Reserve GPU Nodes)
-
-```bash
-# Taint GPU nodes so only GPU workloads land there (like Slurm partition restrictions)
+    effect: "NoSchedule"</code></pre><h3>Taints and Tolerations (Reserve GPU Nodes)</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Taint GPU nodes so only GPU workloads land there (like Slurm partition restrictions)
 kubectl taint nodes gpu-node-1 gpu-type=h200:NoSchedule
 
-# Now only pods with matching tolerations can be scheduled there
-```
-
-### Multi-Node GPU Training (MPI-Style)
-
-For distributed training across multiple nodes, use the MPI Operator or PyTorch Operator:
-
-```yaml
-apiVersion: kubeflow.org/v1
+# Now only pods with matching tolerations can be scheduled there</code></pre><h3>Multi-Node GPU Training (MPI-Style)</h3>
+<p>For distributed training across multiple nodes, use the MPI Operator or PyTorch Operator:</p>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>apiVersion: kubeflow.org/v1
 kind: PyTorchJob
 metadata:
   name: distributed-training
@@ -1738,27 +1492,15 @@ spec:
             image: myregistry/distributed-trainer:v1
             resources:
               limits:
-                nvidia.com/gpu: 8   # 8 GPUs per node = 32 total GPUs
-```
-
----
-
-## 12. Phase 11: ML Pipelines with Kubeflow
-
-### Key Kubeflow Components
-
-| Component | Purpose |
-|---|---|
-| **Kubeflow Pipelines** | Define, deploy, and manage ML workflows as DAGs |
-| **Katib** | Hyperparameter tuning (like Optuna but native to K8s) |
-| **KServe** | Model serving and inference |
-| **Training Operators** | PyTorch, TensorFlow, MPI, XGBoost distributed training |
-| **Notebooks** | JupyterHub on K8s |
-
-### Simple Kubeflow Pipeline
-
-```python
-from kfp import dsl, compiler
+                nvidia.com/gpu: 8   # 8 GPUs per node = 32 total GPUs</code></pre><hr>
+<h2>12. Phase 11: ML Pipelines with Kubeflow</h2>
+<h3>Key Kubeflow Components</h3>
+<div class="table-wrap"><table><thead><tr><th>Component</th><th>Purpose</th></tr></thead><tbody><tr><td><strong>Kubeflow Pipelines</strong></td><td>Define, deploy, and manage ML workflows as DAGs</td></tr>
+<tr><td><strong>Katib</strong></td><td>Hyperparameter tuning (like Optuna but native to K8s)</td></tr>
+<tr><td><strong>KServe</strong></td><td>Model serving and inference</td></tr>
+<tr><td><strong>Training Operators</strong></td><td>PyTorch, TensorFlow, MPI, XGBoost distributed training</td></tr>
+<tr><td><strong>Notebooks</strong></td><td>JupyterHub on K8s</td></tr></tbody></table></div><h3>Simple Kubeflow Pipeline</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">python</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>from kfp import dsl, compiler
 
 @dsl.component(base_image="python:3.11")
 def preprocess(input_path: str, output_path: dsl.Output[dsl.Dataset]):
@@ -1779,26 +1521,14 @@ def ml_pipeline(data_path: str = "gs://bucket/data.csv"):
     train_task.set_gpu_limit(4)
     train_task.set_memory_limit("32Gi")
 
-compiler.Compiler().compile(ml_pipeline, "pipeline.yaml")
-```
-
----
-
-## 13. Phase 12: Observability
-
-### The Monitoring Stack
-
-```
-Prometheus     → Metrics collection and alerting
+compiler.Compiler().compile(ml_pipeline, "pipeline.yaml")</code></pre><hr>
+<h2>13. Phase 12: Observability</h2>
+<h3>The Monitoring Stack</h3>
+<pre style="position:relative"><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>Prometheus     → Metrics collection and alerting
 Grafana        → Dashboards and visualization
 Loki           → Log aggregation (like ELK but lighter)
-Jaeger/Tempo   → Distributed tracing
-```
-
-### Quick Install with Helm
-
-```bash
-# Prometheus + Grafana stack
+Jaeger/Tempo   → Distributed tracing</code></pre><h3>Quick Install with Helm</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Prometheus + Grafana stack
 helm install kube-prom-stack prometheus-community/kube-prometheus-stack \
   --namespace monitoring \
   --create-namespace \
@@ -1806,13 +1536,8 @@ helm install kube-prom-stack prometheus-community/kube-prometheus-stack \
 
 # Access Grafana
 kubectl port-forward -n monitoring svc/kube-prom-stack-grafana 3000:80
-# Then open http://localhost:3000
-```
-
-### Key Metrics to Watch
-
-```
-# Node-level (like 'sinfo' detail)
+# Then open http://localhost:3000</code></pre><h3>Key Metrics to Watch</h3>
+<pre style="position:relative"><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Node-level (like 'sinfo' detail)
 node_cpu_seconds_total
 node_memory_MemAvailable_bytes
 nvidia_gpu_duty_cycle           # GPU utilization
@@ -1824,19 +1549,14 @@ kube_pod_status_phase
 
 # Cluster-level
 kube_node_status_condition
-kube_pod_container_status_restarts_total
-```
-
-### Useful Debugging Workflow
-
-```bash
-# Pod not starting?
-kubectl describe pod <name>          # Check Events section at bottom
+kube_pod_container_status_restarts_total</code></pre><h3>Useful Debugging Workflow</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Pod not starting?
+kubectl describe pod &lt;name&gt;          # Check Events section at bottom
 kubectl get events --sort-by='.lastTimestamp'
 
 # Pod crashing?
-kubectl logs <pod> --previous        # Logs from last crash
-kubectl get pod <name> -o yaml | grep -A5 "state:"
+kubectl logs &lt;pod&gt; --previous        # Logs from last crash
+kubectl get pod &lt;name&gt; -o yaml | grep -A5 "state:"
 
 # Can't connect to a service?
 kubectl exec -it debug-pod -- nslookup my-service
@@ -1846,19 +1566,11 @@ kubectl get endpoints my-service     # Are pods registered?
 # Resource pressure?
 kubectl top nodes
 kubectl top pods --sort-by=memory
-kubectl describe node <name> | grep -A5 "Allocated resources"
-```
-
----
-
-## 14. Phase 13: Advanced — CRDs, Operators & GitOps
-
-### Custom Resource Definitions (CRDs)
-
-CRDs let you extend Kubernetes with your own object types:
-
-```yaml
-apiVersion: apiextensions.k8s.io/v1
+kubectl describe node &lt;name&gt; | grep -A5 "Allocated resources"</code></pre><hr>
+<h2>14. Phase 13: Advanced — CRDs, Operators &amp; GitOps</h2>
+<h3>Custom Resource Definitions (CRDs)</h3>
+<p>CRDs let you extend Kubernetes with your own object types:</p>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: trainingjobs.ml.example.com
@@ -1885,21 +1597,12 @@ spec:
               epochs:
                 type: integer
               gpus:
-                type: integer
-```
-
-Now you can do `kubectl get trainingjobs` and manage ML jobs as native K8s objects.
-
-### Operators
-
-An Operator = CRD + Controller. It encodes domain expertise into Kubernetes. Popular operators include the Prometheus Operator, cert-manager, and various database operators (PostgreSQL, MySQL, Redis).
-
-### GitOps with ArgoCD
-
-GitOps principle: Git is the single source of truth. ArgoCD watches your Git repo and automatically applies changes to the cluster.
-
-```bash
-# Install ArgoCD
+                type: integer</code></pre><p>Now you can do <code>kubectl get trainingjobs</code> and manage ML jobs as native K8s objects.</p>
+<h3>Operators</h3>
+<p>An Operator = CRD + Controller. It encodes domain expertise into Kubernetes. Popular operators include the Prometheus Operator, cert-manager, and various database operators (PostgreSQL, MySQL, Redis).</p>
+<h3>GitOps with ArgoCD</h3>
+<p>GitOps principle: Git is the single source of truth. ArgoCD watches your Git repo and automatically applies changes to the cluster.</p>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Install ArgoCD
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
@@ -1909,191 +1612,992 @@ argocd app create my-app \
   --path production/ \
   --dest-server https://kubernetes.default.svc \
   --dest-namespace production \
-  --sync-policy automated
-```
+  --sync-policy automated</code></pre><p>The workflow becomes: push YAML to Git → ArgoCD detects change → applies to cluster → monitors drift.</p>
+<hr>
+<h2>15. Hands-On Labs</h2>
+<h3>Lab 1: Deploy a Full Stack App</h3>
+<p>Deploy a frontend (nginx), backend (Flask/FastAPI), and database (PostgreSQL) with Services connecting them. Add an Ingress for external access.</p>
+<h3>Lab 2: GPU Batch Processing</h3>
+<p>Create a Job that processes images with a GPU. Use node affinity to target GPU nodes. Mount a PVC for input/output data.</p>
+<h3>Lab 3: Auto-Scaling Under Load</h3>
+<p>Deploy an app with HPA. Use a load generator (<code>kubectl run loadgen --image=busybox -- /bin/sh -c &quot;while true; do wget -q -O- http://my-app; done&quot;</code>) and watch it scale.</p>
+<h3>Lab 4: Helm Chart from Scratch</h3>
+<p>Package your Lab 1 app as a Helm chart with configurable replicas, image tags, and resource limits.</p>
+<h3>Lab 5: GitOps Pipeline</h3>
+<p>Set up ArgoCD, connect it to a Git repo with your manifests. Make a change in Git and watch it auto-deploy.</p>
+<h3>Lab 6: Distributed GPU Training</h3>
+<p>Use the PyTorch Operator to run a multi-node training job. Monitor GPU utilization with Prometheus/Grafana.</p>
+<hr>
+<h2>16. Cheat Sheet</h2>
+<h3>Resource Units</h3>
+<div class="table-wrap"><table><thead><tr><th>Unit</th><th>Meaning</th></tr></thead><tbody><tr><td><code>100m</code> CPU</td><td>0.1 CPU core (100 millicores)</td></tr>
+<tr><td><code>1</code> CPU</td><td>1 full core</td></tr>
+<tr><td><code>128Mi</code></td><td>128 mebibytes (≈134 MB)</td></tr>
+<tr><td><code>1Gi</code></td><td>1 gibibyte (≈1.07 GB)</td></tr>
+<tr><td><code>nvidia.com/gpu: 1</code></td><td>1 GPU</td></tr></tbody></table></div><h3>Common Troubleshooting</h3>
+<div class="table-wrap"><table><thead><tr><th>Symptom</th><th>Check</th></tr></thead><tbody><tr><td>Pod stuck in <code>Pending</code></td><td><code>kubectl describe pod</code> → Events. Usually resource shortage or node affinity mismatch</td></tr>
+<tr><td>Pod in <code>CrashLoopBackOff</code></td><td><code>kubectl logs <pod> --previous</code> → app error or misconfiguration</td></tr>
+<tr><td>Pod in <code>ImagePullBackOff</code></td><td>Wrong image name, tag, or missing registry credentials</td></tr>
+<tr><td>Service not reachable</td><td>Check <code>kubectl get endpoints</code> — selector might not match pod labels</td></tr>
+<tr><td>Node <code>NotReady</code></td><td><code>kubectl describe node</code> → kubelet or container runtime issues</td></tr>
+<tr><td><code>OOMKilled</code></td><td>Container exceeded memory limit. Increase <code>limits.memory</code></td></tr>
+<tr><td><code>Evicted</code></td><td>Node under disk or memory pressure. Check node conditions</td></tr></tbody></table></div><h3>Quick YAML Starters</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Generate YAML templates (never write from scratch!)
+kubectl create deployment myapp --image=nginx --dry-run=client -o yaml &gt; deployment.yaml
+kubectl create service clusterip myapp --tcp=80:8080 --dry-run=client -o yaml &gt; service.yaml
+kubectl create job myjob --image=busybox --dry-run=client -o yaml &gt; job.yaml
+kubectl create cronjob mycron --image=busybox --schedule="0 * * * *" --dry-run=client -o yaml &gt; cronjob.yaml</code></pre><hr>
+<h2>17. Resources &amp; Certification Path</h2>
+<h3>Practice Environments</h3>
+<ul>
+<li><strong>minikube</strong> — Local single-node cluster (easiest start)</li>
+<li><strong>kind</strong> (Kubernetes IN Docker) — Great for CI/testing, multi-node locally</li>
+<li><strong>k3s / k3d</strong> — Lightweight K8s, great for edge/dev</li>
+<li><strong>Killercoda</strong> — Free browser-based K8s labs (killercoda.com)</li>
+<li><strong>Play with Kubernetes</strong> — Free 4-hour K8s playground</li>
+</ul>
+<h3>Documentation</h3>
+<ul>
+<li><strong>kubernetes.io/docs</strong> — Official docs (bookmark the API reference)</li>
+<li><strong>learnk8s.io</strong> — Excellent visual guides and best practices</li>
+<li><strong>kubectl cheat sheet</strong> — kubernetes.io/docs/reference/kubectl/cheatsheet/</li>
+</ul>
+<h3>Certification Path</h3>
+<ol>
+<li><strong>CKA</strong> (Certified Kubernetes Administrator) — Operations focus. Start here.</li>
+<li><strong>CKAD</strong> (Certified Kubernetes Application Developer) — Developer focus.</li>
+<li><strong>CKS</strong> (Certified Kubernetes Security Specialist) — Security hardening. Advanced.</li>
+</ol>
+<p>All exams are hands-on in a live terminal — your Slurm CLI skills will help.</p>
+<h3>Books</h3>
+<ul>
+<li><em>Kubernetes Up &amp; Running</em> (Hightower, Burns, Beda) — The standard intro</li>
+<li><em>Kubernetes Patterns</em> (Ibryam, Huß) — Design patterns for K8s</li>
+<li><em>Production Kubernetes</em> (Rosso et al.) — Operations at scale</li>
+</ul>
+<h3>YouTube</h3>
+<ul>
+<li><strong>TechWorld with Nana</strong> — Excellent beginner-friendly K8s course</li>
+<li><strong>Just me and Opensource</strong> — Deep hands-on tutorials</li>
+<li><strong>CNCF YouTube</strong> — Conference talks, KubeCon recordings</li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>Suggested learning order:</strong> Phases 1-3 first week → Phase 4-6 second week → Phase 7-9 third week → Phase 10-13 ongoing as you build real projects. The labs are designed to reinforce each phase.</p>
+</blockquote>
+<p><em>Last updated: March 2026</em></p>
+<hr>
+<h1>Jetstream2 Lab Plan</h1>
+<h3>A Rational, Budget-Conscious Setup Using ACCESS Credits</h3>
+<hr>
+<h2>18. Jetstream2 Quick Reference</h2>
+<p>Before planning, here are the numbers that matter. Jetstream2 charges by vCPU-hour, and the rate depends on the resource type.</p>
+<h3>Instance Flavors &amp; SU Burn Rates</h3>
+<p><strong>CPU Instances (1 SU per vCPU-hour):</strong></p>
+<div class="table-wrap"><table><thead><tr><th>Flavor</th><th>vCPUs</th><th>RAM</th><th>Disk</th><th>SU/hour</th></tr></thead><tbody><tr><td>m3.tiny</td><td>1</td><td>3 GB</td><td>20 GB</td><td>1</td></tr>
+<tr><td>m3.small</td><td>2</td><td>6 GB</td><td>20 GB</td><td>2</td></tr>
+<tr><td>m3.quad</td><td>4</td><td>15 GB</td><td>20 GB</td><td>4</td></tr>
+<tr><td>m3.medium</td><td>8</td><td>30 GB</td><td>60 GB</td><td>8</td></tr>
+<tr><td>m3.large</td><td>16</td><td>60 GB</td><td>60 GB</td><td>16</td></tr>
+<tr><td>m3.xl</td><td>32</td><td>125 GB</td><td>60 GB</td><td>32</td></tr></tbody></table></div><p><strong>GPU Instances (2 SU per vCPU-hour — halved since July 2024):</strong></p>
+<div class="table-wrap"><table><thead><tr><th>Flavor</th><th>vCPUs</th><th>RAM</th><th>GPU</th><th>GPU RAM</th><th>SU/hour</th></tr></thead><tbody><tr><td>g3.medium</td><td>8</td><td>30 GB</td><td>25% A100</td><td>10 GB</td><td>16</td></tr>
+<tr><td>g3.large</td><td>16</td><td>60 GB</td><td>50% A100</td><td>20 GB</td><td>32</td></tr>
+<tr><td>g3.xl</td><td>32</td><td>120 GB</td><td>Full A100</td><td>40 GB</td><td>64</td></tr></tbody></table></div><h3>Critical Cost-Saving Rules</h3>
+<ul>
+<li><strong>SHELVED = 0 SU cost.</strong> Always shelve when not using your instances.</li>
+<li><strong>STOPPED = 50% burn rate.</strong> Still costs half — don&#39;t stop, shelve instead.</li>
+<li><strong>SUSPENDED = 75% burn rate.</strong> Even worse for GPU instances (and GPU suspend is buggy — avoid it entirely).</li>
+<li><strong>Running but idle = full cost.</strong> An m3.quad sitting idle overnight for 12 hours burns 48 SUs for nothing.</li>
+</ul>
+<hr>
+<h2>19. Lab Architecture Options</h2>
+<p>I&#39;m recommending three tiers. Start with Tier 1 and graduate up as you get comfortable. This prevents burning credits on a complex cluster before you know what you&#39;re doing.</p>
+<h3>Tier 1: Single-Node Learning Lab (Start Here)</h3>
+<p><strong>Purpose:</strong> Learn kubectl, pods, deployments, services, storage, RBAC — everything in the mastery guide through Phase 8.</p>
+<p><strong>Architecture:</strong></p>
+<pre style="position:relative"><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>┌──────────────────────────────────────┐
+│  m3.quad (4 vCPU, 15 GB RAM)         │
+│                                      │
+│  k3s single-node cluster             │
+│  (control plane + worker combined)   │
+│                                      │
+│  Runs: pods, deployments, services,  │
+│  ingress, helm charts, monitoring    │
+└──────────────────────────────────────┘</code></pre><p><strong>Why k3s, not kubeadm?</strong> For a single-node learning environment, k3s gives you a fully functional K8s cluster in under 60 seconds, includes built-in ingress (Traefik), local storage, CoreDNS, and a metrics server. It behaves like real Kubernetes (same API, same kubectl) but uses fewer resources. You can always move to kubeadm for the multi-node tier.</p>
+<p><strong>SU Budget:</strong></p>
+<div class="table-wrap"><table><thead><tr><th>Activity</th><th>Hours/week</th><th>SU/hour</th><th>Weekly SUs</th><th>Monthly SUs</th></tr></thead><tbody><tr><td>Active learning sessions</td><td>15</td><td>4</td><td>60</td><td>240</td></tr>
+<tr><td>Shelved remainder</td><td>—</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td><strong>Total</strong></td><td></td><td></td><td><strong>60</strong></td><td><strong>~240</strong></td></tr></tbody></table></div><p>That&#39;s roughly <strong>2,880 SUs/year</strong> if you study ~15 hours/week. Very cheap.</p>
+<p><strong>Setup Steps:</strong></p>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># 1. Create an m3.quad instance via Exosphere
+#    - Image: Ubuntu 22.04 Featured
+#    - Enable Web Desktop (optional but handy)
+#    - Add your SSH key
 
-The workflow becomes: push YAML to Git → ArgoCD detects change → applies to cluster → monitors drift.
+# 2. SSH in
+ssh exouser@&lt;floating-ip&gt;
 
+# 3. Install k3s (one command)
+curl -sfL https://get.k3s.io | sh -
+
+# 4. Set up kubectl for your user
+mkdir -p ~/.kube
+sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
+sudo chown $(id -u):$(id -g) ~/.kube/config
+export KUBECONFIG=~/.kube/config
+echo 'export KUBECONFIG=~/.kube/config' &gt;&gt; ~/.bashrc
+
+# 5. Verify
+kubectl get nodes
+kubectl get pods -A
+
+# 6. Install Helm
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+# 7. IMPORTANT: When done for the day, SHELVE the instance via Exosphere
+#    Exosphere → Instance → Actions → Shelve
+#    This stops ALL SU charges until you unshelve</code></pre><h3>Tier 2: Multi-Node kubeadm Cluster (Intermediate)</h3>
+<p><strong>Purpose:</strong> Learn real cluster administration — node joining, CNI networking, multi-node scheduling, node affinity, taints/tolerations, PersistentVolumes across nodes, and cluster troubleshooting. This is the experience closest to managing a production cluster and maps directly to your Slurm cluster management experience.</p>
+<p><strong>Architecture:</strong></p>
+<pre style="position:relative"><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>┌──────────────────────────────────────────────────────────┐
+│                    Jetstream2 Project                      │
+│                                                           │
+│  ┌─────────────────┐  ┌───────────────┐  ┌────────────┐  │
+│  │ k8s-control      │  │ k8s-worker-1  │  │ k8s-worker-2│ │
+│  │ m3.quad           │  │ m3.quad       │  │ m3.quad     │ │
+│  │ 4 vCPU, 15 GB     │  │ 4 vCPU, 15 GB│  │ 4 vCPU,15GB│ │
+│  │                   │  │              │  │            │  │
+│  │ control plane     │  │ worker node  │  │ worker node│  │
+│  │ etcd, api-server  │  │ kubelet      │  │ kubelet    │  │
+│  │ scheduler         │  │ kube-proxy   │  │ kube-proxy │  │
+│  │ controller-mgr    │  │ workloads    │  │ workloads  │  │
+│  └────────┬──────────┘  └──────┬───────┘  └─────┬──────┘  │
+│           │      Private Network (auto)          │         │
+│           └──────────────┴───────────────────────┘         │
+│                                                           │
+│  ┌─────────────────────────────────────────────────────┐  │
+│  │ Manila Share or Volume (shared storage for PVs)      │  │
+│  └─────────────────────────────────────────────────────┘  │
+│                                                           │
+└──────────────────────────────────────────────────────────┘</code></pre><p><strong>SU Budget:</strong></p>
+<div class="table-wrap"><table><thead><tr><th>Activity</th><th>Nodes</th><th>Hours/week</th><th>SU/hour each</th><th>Weekly SUs</th><th>Monthly SUs</th></tr></thead><tbody><tr><td>Active lab (3 nodes running)</td><td>3</td><td>12</td><td>4</td><td>144</td><td>576</td></tr>
+<tr><td>Shelved remainder</td><td>3</td><td>—</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td><strong>Total</strong></td><td></td><td></td><td></td><td><strong>144</strong></td><td><strong>~576</strong></td></tr></tbody></table></div><p>About <strong>6,912 SUs/year</strong> — still very manageable.</p>
+<p><strong>Setup Steps:</strong></p>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># 1. Create 3 x m3.quad instances via Exosphere
+#    Names: k8s-control, k8s-worker-1, k8s-worker-2
+#    Image: Ubuntu 22.04 Featured
+#    Same network/project
+
+# 2. On ALL 3 nodes — run the prep script:
+
+# Disable swap
+sudo swapoff -a
+sudo sed -i '/ swap / s/^/#/' /etc/fstab
+
+# Kernel modules
+cat &lt;&lt;EOF | sudo tee /etc/modules-load.d/k8s.conf
+overlay
+br_netfilter
+EOF
+sudo modprobe overlay
+sudo modprobe br_netfilter
+
+# Sysctl
+cat &lt;&lt;EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward                 = 1
+EOF
+sudo sysctl --system
+
+# Install containerd
+sudo apt-get update &amp;&amp; sudo apt-get install -y containerd
+sudo mkdir -p /etc/containerd
+containerd config default | sudo tee /etc/containerd/config.toml
+sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' \
+  /etc/containerd/config.toml
+sudo systemctl restart containerd
+
+# Install kubeadm, kubelet, kubectl
+sudo apt-get install -y apt-transport-https ca-certificates curl gpg
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.35/deb/Release.key | \
+  sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] \
+  https://pkgs.k8s.io/core:/stable:/v1.35/deb/ /' | \
+  sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+
+# Set hostnames (run the appropriate one on each node)
+sudo hostnamectl set-hostname k8s-control    # on control plane
+sudo hostnamectl set-hostname k8s-worker-1   # on worker 1
+sudo hostnamectl set-hostname k8s-worker-2   # on worker 2
+
+# Add /etc/hosts entries on all nodes
+# (use the PRIVATE IPs from Exosphere — run `hostname -I` to find them)
+echo "&lt;control-private-ip&gt; k8s-control" | sudo tee -a /etc/hosts
+echo "&lt;worker1-private-ip&gt; k8s-worker-1" | sudo tee -a /etc/hosts
+echo "&lt;worker2-private-ip&gt; k8s-worker-2" | sudo tee -a /etc/hosts
+
+# 3. On CONTROL PLANE only:
+
+sudo kubeadm init \
+  --pod-network-cidr=192.168.0.0/16 \
+  --control-plane-endpoint=k8s-control:6443
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+# Install Calico CNI
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
+
+# IMPORTANT for Jetstream2: fix Calico IP detection for ens* interfaces
+kubectl set env daemonset/calico-node -n kube-system \
+  IP_AUTODETECTION_METHOD=interface=ens\*
+
+# Generate join command
+kubeadm token create --print-join-command
+# Save the output!
+
+# 4. On EACH WORKER node:
+sudo kubeadm join k8s-control:6443 --token &lt;token&gt; \
+  --discovery-token-ca-cert-hash sha256:&lt;hash&gt;
+
+# 5. Back on CONTROL PLANE — verify:
+kubectl get nodes
+# All three should show "Ready" within a minute or two
+
+kubectl label node k8s-worker-1 node-role.kubernetes.io/worker=worker
+kubectl label node k8s-worker-2 node-role.kubernetes.io/worker=worker
+
+# 6. Install Helm
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+# 7. WHEN DONE: Shelve ALL 3 instances via Exosphere</code></pre><h3>Tier 3: GPU + Multi-Node (Advanced)</h3>
+<p><strong>Purpose:</strong> GPU workloads, NVIDIA device plugin, distributed training, KubeFlow. Only move here once you&#39;re comfortable with Tier 2.</p>
+<p><strong>Architecture:</strong> Same as Tier 2, but add a g3.medium (partial A100, 10 GB VRAM) as a GPU worker node. This is enough for testing GPU scheduling, running inference, and small training jobs.</p>
+<p><strong>Important:</strong> You must have Jetstream2-GPU as a separate resource on your ACCESS allocation. Having Jetstream2 CPU access does NOT include GPU access. You may need to exchange ACCESS credits specifically for Jetstream2-GPU SUs.</p>
+<p><strong>SU Budget:</strong></p>
+<div class="table-wrap"><table><thead><tr><th>Activity</th><th>Detail</th><th>Hours/week</th><th>SU/hour</th><th>Weekly SUs</th><th>Monthly SUs</th></tr></thead><tbody><tr><td>3 CPU nodes (active)</td><td>3 × m3.quad</td><td>10</td><td>12 total</td><td>120</td><td>480</td></tr>
+<tr><td>1 GPU node (active)</td><td>g3.medium</td><td>6</td><td>16</td><td>96</td><td>384</td></tr>
+<tr><td>All shelved rest of time</td><td>—</td><td>—</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td><strong>Total</strong></td><td></td><td></td><td></td><td><strong>216</strong></td><td><strong>~864</strong></td></tr></tbody></table></div><p>About <strong>10,368 SUs/year</strong> — still reasonable, but you need to be disciplined about shelving.</p>
+<hr>
+<h2>20. Alternative: Magnum (Managed K8s on Jetstream2)</h2>
+<p>Jetstream2 also offers OpenStack Magnum, which deploys Kubernetes clusters automatically using pre-built images. This is faster (~10 minutes) and supports autoscaling, load balancers, and multi-master HA out of the box.</p>
+<p><strong>When to use Magnum instead of kubeadm:</strong></p>
+<ul>
+<li>You want a production-like cluster without manual setup</li>
+<li>You need load balancer integration (OpenStack Octavia)</li>
+<li>You want cluster autoscaling (workers spin up/down automatically)</li>
+<li>You&#39;ve already learned the manual setup and want to move faster</li>
+</ul>
+<p><strong>When to stick with kubeadm:</strong></p>
+<ul>
+<li>You&#39;re learning cluster administration (Magnum hides the internals)</li>
+<li>You want CKA exam-relevant experience (CKA tests kubeadm, not Magnum)</li>
+<li>You need full control over the K8s version and CNI</li>
+</ul>
+<p><strong>Quick Magnum setup:</strong></p>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Requires OpenStack CLI — install it first
+pip install python-openstackclient python-magnumclient python-octaviaclient
+
+# Source your Jetstream2 credentials
+source app-cred-openrc.sh
+
+# Clone the deployment repo
+git clone https://github.com/zonca/jupyterhub-deploy-kubernetes-jetstream
+cd jupyterhub-deploy-kubernetes-jetstream/kubernetes_magnum
+
+# Edit create_cluster.sh with your settings, then:
+bash create_cluster.sh
+
+# Wait ~10 minutes, then:
+openstack coe cluster config &lt;cluster-name&gt; --force
+export KUBECONFIG=$(pwd)/config
+kubectl get nodes</code></pre><hr>
+<h2>21. SU Budgeting Strategy</h2>
+<h3>How to Think About Your Budget</h3>
+<p>Let&#39;s say you have a typical Discover or Accelerate ACCESS allocation. Here&#39;s how to plan:</p>
+<div class="table-wrap"><table><thead><tr><th>Allocation Size</th><th>Available for K8s Lab</th><th>Duration at Tier 1</th><th>Duration at Tier 2</th><th>Duration at Tier 3</th></tr></thead><tbody><tr><td>50,000 SUs</td><td>~50,000</td><td>~17 months</td><td>~7 months</td><td>~5 months</td></tr>
+<tr><td>200,000 SUs</td><td>~200,000</td><td>~5.7 years</td><td>~2.4 years</td><td>~1.6 years</td></tr>
+<tr><td>1,000,000 SUs</td><td>~1,000,000</td><td>decades</td><td>~12 years</td><td>~8 years</td></tr></tbody></table></div><p>For a K8s learning lab, even 50,000 SUs is extremely generous — you won&#39;t burn through that unless you forget to shelve.</p>
+<h3>The #1 Budget Killer: Forgetting to Shelve</h3>
+<p>A 3-node Tier 2 cluster left running 24/7 for a month costs:</p>
+<blockquote>
+<p>3 nodes × 4 SU/hour × 24 hours × 30 days = <strong>8,640 SUs/month</strong></p>
+</blockquote>
+<p>The same cluster, shelved except for 12 hours/week of active use:</p>
+<blockquote>
+<p>3 nodes × 4 SU/hour × 12 hours × 4 weeks = <strong>576 SUs/month</strong></p>
+</blockquote>
+<p>That&#39;s a <strong>15x difference.</strong> Set a reminder or create a shelve script.</p>
+<h3>Automated Shelve Reminder</h3>
+<p>Add this to your control plane node&#39;s crontab to email yourself:</p>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Remind to shelve at 6 PM your time
+crontab -e
+# Add:
+0 18 * * * echo "REMINDER: Shelve your K8s nodes on Jetstream2!" | \
+  mail -s "Shelve Jetstream2" you@email.com</code></pre><p>Or create a simple script to check your SU usage:</p>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Check current allocation usage
+openstack usage show --start $(date -d '-30 days' +%Y-%m-%d) \
+  --end $(date +%Y-%m-%d)</code></pre><hr>
+<h2>22. Recommended Learning Path on Jetstream2</h2>
+<h3>Week 1-2: Tier 1 — Foundations</h3>
+<ol>
+<li>Launch a single m3.quad, install k3s</li>
+<li>Work through mastery guide Phases 0-3 (kubectl fluency, core concepts)</li>
+<li>Deploy nginx, expose it via NodePort, access from browser using Floating IP</li>
+<li>Practice: create/delete deployments, scale, rollback, check logs</li>
+<li><strong>Shelve every night</strong></li>
+</ol>
+<h3>Week 3-4: Tier 1 — Intermediate</h3>
+<ol>
+<li>Same single node</li>
+<li>Work through Phases 4-6 (workload types, networking, storage)</li>
+<li>Deploy a multi-container app (frontend + backend + database)</li>
+<li>Set up Ingress routing (k3s includes Traefik by default)</li>
+<li>Create PersistentVolumeClaims, attach Jetstream2 volumes</li>
+<li><strong>Shelve every night</strong></li>
+</ol>
+<h3>Week 5-6: Tier 1 → Tier 2 Transition</h3>
+<ol>
+<li>Snapshot your Tier 1 instance (save your work)</li>
+<li>Build the 3-node kubeadm cluster (Tier 2)</li>
+<li>Work through Phases 7-9 (RBAC, Helm, autoscaling)</li>
+<li>Practice node affinity, taints — schedule pods on specific workers</li>
+<li>Install Prometheus + Grafana via Helm</li>
+<li><strong>Shelve all 3 nodes every night</strong></li>
+</ol>
+<h3>Week 7-8: Tier 2 — Advanced</h3>
+<ol>
+<li>Deploy apps that use multi-node features (StatefulSets, DaemonSets)</li>
+<li>Practice cluster troubleshooting (drain a node, cordon, uncordon)</li>
+<li>Set up NetworkPolicies</li>
+<li>Try the Magnum deployment as an alternative exercise</li>
+<li>Snapshot your control plane for quick restore</li>
+</ol>
+<h3>Week 9+: Tier 3 — GPU (Optional)</h3>
+<ol>
+<li>Add a g3.medium GPU worker to your cluster</li>
+<li>Install NVIDIA device plugin</li>
+<li>Run a GPU pod, verify GPU access with <code>nvidia-smi</code></li>
+<li>Deploy a PyTorch training job</li>
+<li>Explore KubeFlow if ML pipelines are your goal</li>
+</ol>
+<hr>
+<h2>23. Jetstream2-Specific Tips</h2>
+<h3>Storage: Volumes vs Root Disk</h3>
+<p>Jetstream2 instances have limited root disk (20 GB for small flavors, 60 GB for medium+). For persistent data (datasets, container images, PV backing):</p>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Create a volume via Exosphere or CLI
+openstack volume create --size 100 k8s-data
+
+# Attach to your instance
+openstack server add volume k8s-control k8s-data
+
+# Mount it (inside the instance)
+sudo mkfs.ext4 /dev/sdb       # Only first time!
+sudo mkdir -p /mnt/k8s-data
+sudo mount /dev/sdb /mnt/k8s-data
+echo '/dev/sdb /mnt/k8s-data ext4 defaults 0 2' | sudo tee -a /etc/fstab</code></pre><p>Volumes persist independently of instances — you can shelve/delete the instance and the volume survives.</p>
+<h3>Manila Shares (Shared Storage Across Nodes)</h3>
+<p>For multi-node clusters where you need ReadWriteMany PersistentVolumes (like a shared dataset), use Manila shares:</p>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Create a Manila share
+openstack share create --name k8s-shared NFS 50
+
+# Get the export path
+openstack share export location list k8s-shared</code></pre><p>Then use this as an NFS-backed PersistentVolume in your K8s cluster.</p>
+<h3>Networking on Jetstream2</h3>
+<ul>
+<li>Instances on the same allocation automatically share a private network</li>
+<li>The private IPs (usually 10.x.x.x) are what you use for K8s inter-node communication</li>
+<li>Floating (public) IPs are limited — only assign them to nodes that need external access (typically just the control plane or an ingress node)</li>
+<li>Security groups: open ports 6443 (API server), 30000-32767 (NodePort) on the control plane&#39;s security group if you want external access</li>
+</ul>
+<h3>Snapshots: Save Your Progress</h3>
+<p>Before major changes, snapshot your instances. This is like saving a game — you can restore to a known good state:</p>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Via Exosphere: Instance → Actions → Create Snapshot
+# Via CLI:
+openstack server image create --name "k8s-control-working" k8s-control</code></pre><p>Snapshots don&#39;t cost SUs (they use storage quota) and let you tear down and rebuild without repeating the full setup.</p>
+<h3>CACAO: One-Click K3s Clusters</h3>
+<p>Jetstream2&#39;s CACAO interface can deploy multi-VM K3s clusters with a few clicks — no manual setup. This is the fastest way to get a cluster running if you&#39;ve already learned the manual process and just want a working environment quickly.</p>
+<p>Access it at: Exosphere → CACAO → Deploy → Multi-VM Kubernetes Cluster (k3s)</p>
+<hr>
+<h2>24. Decision Summary</h2>
+<pre style="position:relative"><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>What should I do RIGHT NOW?
+│
+├── 1. Log into Exosphere (https://jetstream2.exosphere.app)
+├── 2. Create one m3.quad instance (Ubuntu 22.04)
+├── 3. SSH in, run: curl -sfL https://get.k3s.io | sh -
+├── 4. Start working through the mastery guide
+├── 5. SHELVE when done for the day
+│
+└── Budget check: This costs ~4 SUs/hour while active,
+    0 SUs while shelved. At 15 hrs/week, that's
+    ~240 SUs/month. You have plenty of runway.</code></pre><hr>
+<h2>25. Reference Links</h2>
+<ul>
+<li>Jetstream2 Instance Flavors: <a href="https://docs.jetstream-cloud.org/general/instance-flavors/">https://docs.jetstream-cloud.org/general/instance-flavors/</a></li>
+<li>Building a K8s Cluster on JS2: <a href="https://docs.jetstream-cloud.org/general/k8scluster/">https://docs.jetstream-cloud.org/general/k8scluster/</a></li>
+<li>Magnum (Managed K8s): <a href="https://docs.jetstream-cloud.org/general/k8smagnum/">https://docs.jetstream-cloud.org/general/k8smagnum/</a></li>
+<li>Kubespray on JS2: <a href="https://docs.jetstream-cloud.org/general/k8skubespray/">https://docs.jetstream-cloud.org/general/k8skubespray/</a></li>
+<li>CACAO K3s Deployment: <a href="https://docs.jetstream-cloud.org/ui/cacao/deployment_kubernetes/">https://docs.jetstream-cloud.org/ui/cacao/deployment_kubernetes/</a></li>
+<li>SU Estimation Calculator: <a href="https://docs.jetstream-cloud.org/alloc/estimator/">https://docs.jetstream-cloud.org/alloc/estimator/</a></li>
+<li>ACCESS Allocations: <a href="https://allocations.access-ci.org/">https://allocations.access-ci.org/</a></li>
+<li>Shelving/Instance Management: <a href="https://docs.jetstream-cloud.org/getting-started/instance-management/">https://docs.jetstream-cloud.org/getting-started/instance-management/</a></li>
+</ul>
+<p><em>Last updated: March 2026</em></p>
+<hr>
+<h1>Bioinformatics K8s Lab Exercises</h1>
+<h3>Real-World Tasks for Your Jetstream2 Cluster</h3>
+<blockquote>
+<p>These exercises are designed around real work — <em>P. falciparum</em> genomics, RNA-seq, spatial transcriptomics, and Nextflow pipelines.</p>
+</blockquote>
+<hr>
+<h2>26. Exercise 1: Containerized FastQC at Scale</h2>
+<p><strong>K8s Concepts:</strong> Jobs, Pods, resource requests/limits, volume mounts
+<strong>Bioinformatics:</strong> QC of FASTQ files — the first step of every pipeline you run</p>
+<h3>The Task</h3>
+<p>Run FastQC on a set of RNA-seq FASTQ files using K8s Jobs instead of submitting
+individual Slurm jobs. This is the simplest possible bioinformatics workload on K8s
+and a good sanity check that your cluster works.</p>
+<h3>Setup</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Download some public test data (small P. falciparum RNA-seq)
+mkdir -p /mnt/k8s-data/fastq
+cd /mnt/k8s-data/fastq
+# SRA accession from a Pf RNA-seq study — small files for testing
+fastq-dump --split-files --gzip SRR1028923
+# Or use any small FASTQs you have</code></pre><h3>K8s Manifest</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># fastqc-job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: fastqc-sample1
+spec:
+  backoffLimit: 2
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: fastqc
+        image: biocontainers/fastqc:v0.12.1_cv2
+        command: ["fastqc"]
+        args:
+        - "/data/SRR1028923_1.fastq.gz"
+        - "/data/SRR1028923_2.fastq.gz"
+        - "--outdir=/output"
+        - "--threads=2"
+        resources:
+          requests:
+            cpu: "2"
+            memory: "2Gi"
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+        volumeMounts:
+        - name: data
+          mountPath: /data
+          readOnly: true
+        - name: output
+          mountPath: /output
+      volumes:
+      - name: data
+        hostPath:
+          path: /mnt/k8s-data/fastq
+      - name: output
+        hostPath:
+          path: /mnt/k8s-data/fastqc-results</code></pre><h3>What to Observe</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>kubectl apply -f fastqc-job.yaml
+kubectl get jobs -w                    # Watch it complete
+kubectl logs job/fastqc-sample1        # See FastQC output
+kubectl describe job fastqc-sample1    # Check resource usage
+ls /mnt/k8s-data/fastqc-results/      # Verify HTML reports exist</code></pre><h3>Level Up</h3>
+<p>Modify the Job to process multiple samples using <code>parallelism</code> and <code>completions</code>.
+Think about how this compares to a Slurm job array.</p>
+<hr>
+<h2>27. Exercise 2: nf-core/rnaseq on K8s with Nextflow</h2>
+<p><strong>K8s Concepts:</strong> Nextflow K8s executor, ServiceAccounts, PersistentVolumeClaims, ConfigMaps, RBAC
+<strong>Bioinformatics:</strong> Full RNA-seq pipeline — trim, align, quantify</p>
+<p>This is the big one. Nextflow has a native Kubernetes executor that submits each
+process as a K8s Pod. Instead of Slurm scheduling your STAR/Salmon/HISAT2 jobs,
+K8s does it. This is directly relevant to how you&#39;d run pipelines in production
+on a K8s cluster.</p>
+<h3>Prerequisites</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Install Nextflow on your control plane (or a dedicated "submit" node)
+curl -s https://get.nextflow.io | bash
+sudo mv nextflow /usr/local/bin/
+
+# Nextflow needs kubectl access — verify
+kubectl get nodes</code></pre><h3>Storage Setup</h3>
+<p>Nextflow on K8s needs a shared PersistentVolumeClaim for work directories:</p>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># nextflow-pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nextflow-work
+spec:
+  accessModes:
+  - ReadWriteMany        # Must be RWX for multi-pod access
+  resources:
+    requests:
+      storage: 100Gi
+  # storageClassName: depends on your setup
+  # On Jetstream2 with Manila, use an NFS-backed StorageClass</code></pre><pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>kubectl apply -f nextflow-pvc.yaml</code></pre><h3>RBAC: Nextflow needs permission to create pods</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># nextflow-rbac.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nextflow
 ---
-
-## 15. Hands-On Labs
-
-### Lab 1: Deploy a Full Stack App
-Deploy a frontend (nginx), backend (Flask/FastAPI), and database (PostgreSQL) with Services connecting them. Add an Ingress for external access.
-
-### Lab 2: GPU Batch Processing
-Create a Job that processes images with a GPU. Use node affinity to target GPU nodes. Mount a PVC for input/output data.
-
-### Lab 3: Auto-Scaling Under Load
-Deploy an app with HPA. Use a load generator (`kubectl run loadgen --image=busybox -- /bin/sh -c "while true; do wget -q -O- http://my-app; done"`) and watch it scale.
-
-### Lab 4: Helm Chart from Scratch
-Package your Lab 1 app as a Helm chart with configurable replicas, image tags, and resource limits.
-
-### Lab 5: GitOps Pipeline
-Set up ArgoCD, connect it to a Git repo with your manifests. Make a change in Git and watch it auto-deploy.
-
-### Lab 6: Distributed GPU Training
-Use the PyTorch Operator to run a multi-node training job. Monitor GPU utilization with Prometheus/Grafana.
-
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: nextflow-role
+rules:
+- apiGroups: [""]
+  resources: ["pods", "pods/log", "pods/status"]
+  verbs: ["get", "list", "watch", "create", "delete"]
+- apiGroups: [""]
+  resources: ["persistentvolumeclaims"]
+  verbs: ["get", "list"]
 ---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: nextflow-binding
+subjects:
+- kind: ServiceAccount
+  name: nextflow
+roleRef:
+  kind: Role
+  name: nextflow-role
+  apiGroup: rbac.authorization.k8s.io</code></pre><pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>kubectl apply -f nextflow-rbac.yaml</code></pre><h3>Nextflow Config for K8s</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">groovy</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>// nextflow.config
+profiles {
+  k8s {
+    process {
+      executor = 'k8s'
+      // Every Nextflow task becomes a K8s Pod
+    }
 
-## 16. Cheat Sheet
+    k8s {
+      namespace = 'default'
+      serviceAccount = 'nextflow'
+      storageClaimName = 'nextflow-work'
+      storageMountPath = '/workspace'
+      // Pull policy for containers
+      pullPolicy = 'IfNotPresent'
+    }
+  }
+}
 
-### Resource Units
-| Unit | Meaning |
-|---|---|
-| `100m` CPU | 0.1 CPU core (100 millicores) |
-| `1` CPU | 1 full core |
-| `128Mi` | 128 mebibytes (≈134 MB) |
-| `1Gi` | 1 gibibyte (≈1.07 GB) |
-| `nvidia.com/gpu: 1` | 1 GPU |
+// Resource defaults — match your Jetstream2 node sizes
+process {
+  withLabel: 'process_low' {
+    cpus = 2
+    memory = '4.GB'
+  }
+  withLabel: 'process_medium' {
+    cpus = 4
+    memory = '12.GB'
+  }
+  withLabel: 'process_high' {
+    cpus = 8
+    memory = '24.GB'
+  }
+}</code></pre><h3>Run nf-core/rnaseq</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Start with the test profile (uses tiny bundled test data)
+nextflow run nf-core/rnaseq \
+  -profile test,docker \
+  -c nextflow.config \
+  -profile k8s \
+  --outdir /workspace/rnaseq-results
 
-### Common Troubleshooting
+# Watch pods spin up in another terminal
+kubectl get pods -w</code></pre><h3>What to Observe</h3>
+<p>While the pipeline runs, open a second terminal and watch K8s do its thing:</p>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Watch Nextflow spawn pods for each process
+kubectl get pods -w
 
-| Symptom | Check |
-|---|---|
-| Pod stuck in `Pending` | `kubectl describe pod` → Events. Usually resource shortage or node affinity mismatch |
-| Pod in `CrashLoopBackOff` | `kubectl logs <pod> --previous` → app error or misconfiguration |
-| Pod in `ImagePullBackOff` | Wrong image name, tag, or missing registry credentials |
-| Service not reachable | Check `kubectl get endpoints` — selector might not match pod labels |
-| Node `NotReady` | `kubectl describe node` → kubelet or container runtime issues |
-| `OOMKilled` | Container exceeded memory limit. Increase `limits.memory` |
-| `Evicted` | Node under disk or memory pressure. Check node conditions |
+# You'll see pods for: FASTQC, TRIMGALORE, STAR_ALIGN, SALMON_QUANT, etc.
+# Each one starts, runs, completes, and gets cleaned up
 
-### Quick YAML Starters
+# Check resource consumption
+kubectl top pods
 
-```bash
-# Generate YAML templates (never write from scratch!)
-kubectl create deployment myapp --image=nginx --dry-run=client -o yaml > deployment.yaml
-kubectl create service clusterip myapp --tcp=80:8080 --dry-run=client -o yaml > service.yaml
-kubectl create job myjob --image=busybox --dry-run=client -o yaml > job.yaml
-kubectl create cronjob mycron --image=busybox --schedule="0 * * * *" --dry-run=client -o yaml > cronjob.yaml
-```
+# If a step fails, debug it like any K8s pod
+kubectl describe pod &lt;failed-pod-name&gt;
+kubectl logs &lt;failed-pod-name&gt;</code></pre><h3>Why This Matters</h3>
+<p>This is the exact same pipeline you run on Slurm with <code>-profile slurm</code>. By switching
+to <code>-profile k8s</code>, Nextflow submits each process as a K8s Pod instead of a Slurm job.
+The pipeline code doesn&#39;t change at all — only the executor. This is the power of
+Nextflow&#39;s abstraction layer, and it means every nf-core pipeline you already use
+works on K8s with just a config change.</p>
+<hr>
+<h2>28. Exercise 3: Parallel Variant Calling with K8s Jobs</h2>
+<p><strong>K8s Concepts:</strong> Job parallelism, completions, indexed jobs, ConfigMaps for parameters
+<strong>Bioinformatics:</strong> GATK HaplotypeCaller per-chromosome — exactly what your Pf pipeline does</p>
+<h3>The Concept</h3>
+<p>Your <em>P. falciparum</em> variant calling pipeline runs HaplotypeCaller per chromosome.
+On Slurm you&#39;d submit 14 array jobs (one per Pf3D7 chromosome). On K8s, you use
+an Indexed Job where each pod gets a chromosome index.</p>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># gatk-haplotypecaller-parallel.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: haplotypecaller
+spec:
+  completionMode: Indexed
+  completions: 14            # 14 P. falciparum chromosomes
+  parallelism: 4             # Run 4 at a time (adjust to cluster size)
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: gatk
+        image: broadinstitute/gatk:4.5.0.0
+        command: ["/bin/bash", "-c"]
+        args:
+        - |
+          # JOB_COMPLETION_INDEX is auto-set by K8s (0-13)
+          CHROM_NUM=$(printf "%02d" $((JOB_COMPLETION_INDEX + 1)))
+          CHROM="Pf3D7_${CHROM_NUM}_v3"
+          echo "Processing chromosome: ${CHROM}"
 
+          gatk HaplotypeCaller \
+            -R /data/ref/Pf3D7.fasta \
+            -I /data/bam/sample.bam \
+            -L ${CHROM} \
+            --heterozygosity 0.0029 \
+            --indel-heterozygosity 0.0009 \
+            --sample-ploidy 6 \
+            --assembly-region-padding 250 \
+            -O /output/sample.${CHROM}.g.vcf.gz \
+            -ERC GVCF
+        resources:
+          requests:
+            cpu: "2"
+            memory: "8Gi"
+          limits:
+            cpu: "4"
+            memory: "12Gi"
+        volumeMounts:
+        - name: data
+          mountPath: /data
+        - name: output
+          mountPath: /output
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: pf-reference-data
+      - name: output
+        persistentVolumeClaim:
+          claimName: variant-output</code></pre><h3>What to Observe</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>kubectl apply -f gatk-haplotypecaller-parallel.yaml
+
+# Watch 4 pods run concurrently, completing 14 total
+kubectl get pods -l job-name=haplotypecaller -w
+
+# Check a specific chromosome's logs
+kubectl logs haplotypecaller-3    # Index 3 = Pf3D7_04_v3
+
+# See completion progress
+kubectl get job haplotypecaller
+# COMPLETIONS   DURATION
+# 8/14          12m</code></pre><p>This directly mirrors your existing Slurm array job workflow but teaches you
+indexed Jobs, parallelism control, and how K8s schedules across nodes.</p>
+<hr>
+<h2>29. Exercise 4: Persistent Bioinformatics Services</h2>
+<p><strong>K8s Concepts:</strong> Deployments, Services, Ingress, persistent storage, multi-container pods
+<strong>Bioinformatics:</strong> Always-on tools your lab actually uses</p>
+<h3>Deploy JupyterHub for Your Team</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Add JupyterHub Helm chart
+helm repo add jupyterhub https://hub.jupyter.org/helm-chart/
+helm repo update
+
+# Create a minimal values file
+cat &gt; jupyterhub-values.yaml &lt;&lt; 'EOF'
+singleuser:
+  image:
+    name: jupyter/datascience-notebook
+    tag: latest
+  cpu:
+    limit: 2
+    guarantee: 1
+  memory:
+    limit: 4G
+    guarantee: 2G
+  storage:
+    capacity: 10Gi
+  defaultUrl: "/lab"
+
+hub:
+  config:
+    Authenticator:
+      admin_users:
+        - admin
+    DummyAuthenticator:
+      password: changeme
+    JupyterHub:
+      authenticator_class: dummy
+
+proxy:
+  service:
+    type: NodePort
+EOF
+
+helm install jhub jupyterhub/jupyterhub \
+  --namespace jhub \
+  --create-namespace \
+  --values jupyterhub-values.yaml</code></pre><h3>Deploy an IGV.js Genome Browser</h3>
+<p>For visualizing your spatial transcriptomics or variant calling results:</p>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># igv-browser.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: igv-browser
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: igv
+  template:
+    metadata:
+      labels:
+        app: igv
+    spec:
+      containers:
+      - name: igv
+        image: igvteam/igv-webapp:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: genome-data
+          mountPath: /data
+      volumes:
+      - name: genome-data
+        persistentVolumeClaim:
+          claimName: genome-data
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: igv-service
+spec:
+  type: NodePort
+  selector:
+    app: igv
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30080</code></pre><h3>Deploy MultiQC as a Reporting Service</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># multiqc-cronjob.yaml
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: multiqc-nightly
+spec:
+  schedule: "0 2 * * *"       # Run at 2 AM daily
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+          - name: multiqc
+            image: ewels/multiqc:latest
+            command: ["multiqc"]
+            args:
+            - "/data/pipeline-results"
+            - "--outdir=/reports"
+            - "--force"
+            - "--title=Nightly QC Report"
+            volumeMounts:
+            - name: pipeline-data
+              mountPath: /data
+            - name: reports
+              mountPath: /reports
+          volumes:
+          - name: pipeline-data
+            persistentVolumeClaim:
+              claimName: pipeline-results
+          - name: reports
+            persistentVolumeClaim:
+              claimName: qc-reports</code></pre><hr>
+<h2>30. Exercise 5: Spatial Transcriptomics Processing with DaemonSets and GPU Pods</h2>
+<p><strong>K8s Concepts:</strong> GPU scheduling, node affinity, DaemonSets, resource limits for GPU
+<strong>Bioinformatics:</strong> Processing Visium/Xenium data, cell segmentation</p>
+<p>This one is for when you get to Tier 3 (GPU node). Run Space Ranger or
+cell segmentation models on your GPU node.</p>
+<h3>GPU-Accelerated Cell Segmentation</h3>
+<pre style="position:relative"><span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">yaml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># cellpose-segmentation.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cellpose-segment
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: cellpose
+        image: cellprofiler/cellpose-gpu:latest
+        command: ["python", "-m", "cellpose"]
+        args:
+        - "--dir=/data/images"
+        - "--pretrained_model=cyto2"
+        - "--use_gpu"
+        - "--save_png"
+        - "--diameter=30"
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+            cpu: "8"
+            memory: "24Gi"
+        volumeMounts:
+        - name: spatial-data
+          mountPath: /data
+        - name: dshm
+          mountPath: /dev/shm
+      volumes:
+      - name: spatial-data
+        persistentVolumeClaim:
+          claimName: spatial-datasets
+      - name: dshm
+        emptyDir:
+          medium: Memory
+          sizeLimit: "8Gi"
+      # Only schedule on GPU nodes
+      nodeSelector:
+        nvidia.com/gpu.present: "true"
+      tolerations:
+      - key: "gpu-type"
+        operator: "Exists"
+        effect: "NoSchedule"</code></pre><hr>
+<h2>31. Exercise 6: The Full Stack — Microservices for a Bioinformatics Portal</h2>
+<p><strong>K8s Concepts:</strong> Multi-service architecture, Ingress routing, ConfigMaps, Secrets, HPA
+<strong>Bioinformatics:</strong> Build a mini research portal</p>
+<h3>Architecture</h3>
+<pre style="position:relative"><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>Internet → Ingress Controller
+              │
+              ├── /jupyter  → JupyterHub (notebooks)
+              ├── /igv      → IGV.js (genome browser)
+              ├── /reports  → Nginx serving MultiQC reports
+              └── /api      → Flask API (submit pipeline runs)</code></pre><p>This teaches you real-world K8s patterns: routing traffic to multiple services,
+managing secrets for database credentials, scaling the API tier based on load,
+and keeping persistent data safe while services come and go.</p>
+<p>This is what running bioinformatics infrastructure on K8s actually looks like
+in production — not a single tool, but a platform.</p>
+<hr>
+<h2>32. Exercise Progression Map</h2>
+<pre style="position:relative"><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>Week 1-2 (Tier 1, single node k3s):
+  └── Exercise 1: FastQC Jobs
+      - Learn: pods, jobs, volumes, resource limits
+      - Bioinf: basic QC
 
-## 17. Resources & Certification Path
+Week 3-4 (Tier 1):
+  └── Exercise 2: nf-core/rnaseq on K8s
+      - Learn: Nextflow K8s executor, RBAC, PVCs, watching pods
+      - Bioinf: full RNA-seq pipeline — directly applicable to your work
 
-### Practice Environments
-- **minikube** — Local single-node cluster (easiest start)
-- **kind** (Kubernetes IN Docker) — Great for CI/testing, multi-node locally
-- **k3s / k3d** — Lightweight K8s, great for edge/dev
-- **Killercoda** — Free browser-based K8s labs (killercoda.com)
-- **Play with Kubernetes** — Free 4-hour K8s playground
+Week 5-6 (Tier 2, multi-node kubeadm):
+  └── Exercise 3: Parallel variant calling
+      - Learn: indexed jobs, parallelism, cross-node scheduling
+      - Bioinf: GATK HaplotypeCaller per-chromosome (your Pf pipeline)
 
-### Documentation
-- **kubernetes.io/docs** — Official docs (bookmark the API reference)
-- **learnk8s.io** — Excellent visual guides and best practices
-- **kubectl cheat sheet** — kubernetes.io/docs/reference/kubectl/cheatsheet/
+Week 7-8 (Tier 2):
+  └── Exercise 4: Persistent services
+      - Learn: deployments, services, ingress, Helm, CronJobs
+      - Bioinf: JupyterHub, genome browser, automated QC reports
 
-### Certification Path
-1. **CKA** (Certified Kubernetes Administrator) — Operations focus. Start here.
-2. **CKAD** (Certified Kubernetes Application Developer) — Developer focus.
-3. **CKS** (Certified Kubernetes Security Specialist) — Security hardening. Advanced.
+Week 9+ (Tier 3, GPU):
+  └── Exercise 5: GPU workloads
+      - Learn: GPU scheduling, node affinity, tolerations
+      - Bioinf: cell segmentation for your Visium/Xenium data
 
-All exams are hands-on in a live terminal — your Slurm CLI skills will help.
+Ongoing:
+  └── Exercise 6: Full stack portal
+      - Learn: microservices architecture, autoscaling, production patterns
+      - Bioinf: research infrastructure platform</code></pre><hr>
+<h2>33. Test Data Sources</h2>
+<p>For exercises that need data but you don&#39;t want to transfer your own:</p>
+<div class="table-wrap"><table><thead><tr><th>Data</th><th>Source</th><th>Size</th><th>Use</th></tr></thead><tbody><tr><td>Pf RNA-seq FASTQs</td><td>SRA: SRR1028923</td><td>~500 MB</td><td>Exercises 1, 2</td></tr>
+<tr><td>Pf reference genome</td><td>PlasmoDB Pf3D7</td><td>~23 MB</td><td>Exercise 3</td></tr>
+<tr><td>nf-core test data</td><td>Built into <code>--profile test</code></td><td>Tiny</td><td>Exercise 2</td></tr>
+<tr><td>Visium demo data</td><td>10x Genomics datasets page</td><td>~1-5 GB</td><td>Exercise 5</td></tr>
+<tr><td>MultiQC test reports</td><td><code>multiqc --example</code></td><td>Tiny</td><td>Exercise 4</td></tr></tbody></table></div><p>For the nf-core/rnaseq exercise, the <code>test</code> profile includes its own tiny dataset
+so you don&#39;t need to provide any data at all for the first run.</p>
+<hr>
+<p><em>These exercises are ordered so each one builds on the K8s skills from the previous one.
+By Exercise 4, you&#39;ll have a working bioinformatics platform on K8s that&#39;s genuinely
+useful for your daily work — not just a learning exercise.</em></p>
 
-### Books
-- *Kubernetes Up & Running* (Hightower, Burns, Beda) — The standard intro
-- *Kubernetes Patterns* (Ibryam, Huß) — Design patterns for K8s
-- *Production Kubernetes* (Rosso et al.) — Operations at scale
+  </div>
+</main>
 
-### YouTube
-- **TechWorld with Nana** — Excellent beginner-friendly K8s course
-- **Just me and Opensource** — Deep hands-on tutorials
-- **CNCF YouTube** — Conference talks, KubeCon recordings
+<!-- MARKDOWN SOURCE (embedded) -->
+<!-- markdown pre-rendered -->
 
----
-
-> **Suggested learning order:** Phases 1-3 first week → Phase 4-6 second week → Phase 7-9 third week → Phase 10-13 ongoing as you build real projects. The labs are designed to reinforce each phase.
-
-*Last updated: March 2026*
-
-</script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.1/marked.min.js"></script>
 <script>
 // ═══════════ STATE ═══════════
 const completedSections = JSON.parse(localStorage.getItem('k8s-completed') || '{}');
 
-// ═══════════ RENDER MARKDOWN ═══════════
-const mdRaw = document.getElementById('mdSource').textContent.trim();
-
-marked.setOptions({
-  gfm: true,
-  breaks: false,
-  smartLists: true,
-});
-
-// Custom renderer
-const renderer = new marked.Renderer();
-
-// Wrap tables
-renderer.table = function(header, body) {
-  // marked v12+ passes table as an object
-  if (typeof header === 'object' && header.header && header.rows) {
-    const hdr = header.header.map(cell =>
-      `<th>${cell.tokens ? cell.tokens.map(t => t.raw || t.text || '').join('') : cell.text || ''}</th>`
-    ).join('');
-    const rows = header.rows.map(row =>
-      '<tr>' + row.map(cell =>
-        `<td>${cell.tokens ? cell.tokens.map(t => t.raw || t.text || '').join('') : cell.text || ''}</td>`
-      ).join('') + '</tr>'
-    ).join('');
-    return `<div class="table-wrap"><table><thead><tr>${hdr}</tr></thead><tbody>${rows}</tbody></table></div>`;
-  }
-  return `<div class="table-wrap"><table><thead>${header}</thead><tbody>${body}</tbody></table></div>`;
-};
-
-// Add copy button to code blocks
-renderer.code = function(code, lang) {
-  // marked v12+ passes an object
-  let text, language;
-  if (typeof code === 'object') {
-    text = code.text || code.raw || '';
-    language = code.lang || '';
-  } else {
-    text = code;
-    language = lang || '';
-  }
-  const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  const langLabel = language ? `<span style="position:absolute;top:8px;left:14px;font-size:10px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px">${language}</span>` : '';
-  return `<pre style="position:relative">${langLabel}<button class="copy-btn" onclick="copyCode(this)">Copy</button><code>${escaped}</code></pre>`;
-};
-
-marked.use({ renderer });
-
-const html = marked.parse(mdRaw);
-document.getElementById('content').innerHTML = html;
+// Content is pre-rendered, no markdown parsing needed
 
 // ═══════════ BUILD NAV ═══════════
 const sections = [];
+const sectionGroups = [];
+
+// Collect h1 elements as group dividers
+document.querySelectorAll('.content h1').forEach(h1 => {
+  const text = h1.textContent.trim();
+  // Skip the main title
+  if (text === 'Kubernetes Mastery Guide') return;
+  h1.id = text.toLowerCase().replace(/[^\w\s]/g, '').trim().replace(/\s+/g, '-');
+  sectionGroups.push({ title: text, el: h1 });
+});
+
 document.querySelectorAll('.content h2').forEach((h2, i) => {
   const id = h2.textContent.replace(/[^\w\s→-]/g, '').trim().toLowerCase().replace(/\s+/g, '-').replace(/→/g, '-');
   h2.id = id;
 
-  // Extract number prefix
   const match = h2.textContent.match(/^(\d+)\.\s*(.*)/);
   const num = match ? match[1] : '';
   const title = match ? match[2] : h2.textContent;
 
-  sections.push({ id, num, title, el: h2 });
+  // Determine which group this section belongs to
+  let group = 'guide';
+  if (parseInt(num) >= 26) group = 'bioinfo';
+  else if (parseInt(num) >= 18) group = 'jetstream';
+
+  sections.push({ id, num, title, el: h2, group });
 });
 
 const navContainer = document.getElementById('navLinks');
 function renderNav(filter = '') {
   const f = filter.toLowerCase();
-  navContainer.innerHTML = sections
-    .filter(s => !f || s.title.toLowerCase().includes(f) || s.num.includes(f))
-    .map(s => {
-      const completed = completedSections[s.id] ? 'completed' : '';
-      return `<a class="nav-link ${completed}" href="#${s.id}" data-id="${s.id}" onclick="closeSidebarMobile()">
-        <span class="num">${s.num}</span>
-        <span>${s.title}</span>
-        <span class="check">✓</span>
-      </a>`;
-    }).join('');
+  const filtered = sections.filter(s => !f || s.title.toLowerCase().includes(f) || s.num.includes(f));
+  let html = '';
+  let currentGroup = '';
+  for (const s of filtered) {
+    if (s.group !== currentGroup && !f) {
+      currentGroup = s.group;
+      const label = s.group === 'guide' ? 'K8s Mastery Guide' :
+                    s.group === 'jetstream' ? 'Jetstream2 Lab Plan' :
+                    'Bioinformatics Exercises';
+      html += `<div class="nav-section">${label}</div>`;
+    }
+    const completed = completedSections[s.id] ? 'completed' : '';
+    html += `<a class="nav-link ${completed}" href="#${s.id}" data-id="${s.id}" onclick="closeSidebarMobile()">
+      <span class="num">${s.num}</span>
+      <span>${s.title}</span>
+      <span class="check">✓</span>
+    </a>`;
+  }
+  navContainer.innerHTML = html;
 }
 renderNav();
 

@@ -1,104 +1,71 @@
-# K8s Mastery Guide — Self-Hosted
+# ⎈ Kubernetes Mastery Guide
 
-A single-file, browser-based Kubernetes learning guide with sidebar navigation, dark/light mode, search, code copy, progress tracking, and section completion markers.
+**From HPC/Slurm Admin to K8s Super User — with a bioinformatics focus.**
 
-## Hosting on GitHub Pages (Free — 2 minutes)
+A comprehensive, self-paced Kubernetes learning guide designed for researchers and bioinformaticians who already know their way around HPC clusters, Slurm, containers, and the command line. Instead of starting from zero, this guide maps familiar concepts (partitions → namespaces, `sbatch` → Jobs, `sinfo` → `kubectl get nodes`) and builds toward advanced topics like GPU scheduling, Nextflow on K8s, and multi-omics pipeline orchestration.
 
-### Step 1: Create a GitHub repository
+## What's in this repo
 
-```bash
-# Option A: From the command line
-gh repo create k8s-mastery-guide --public
-cd k8s-mastery-guide
+| File | Description |
+|------|-------------|
+| **[index.html](index.html)** | Interactive browser-based guide with sidebar navigation, dark/light mode, search, code copy buttons, and section completion tracking. Open it locally or host it anywhere. |
+| **[k8s-mastery-guide.md](k8s-mastery-guide.md)** | The raw markdown source covering all 13 phases — from installation through CRDs, Operators, and GitOps. |
+| **[jetstream2-k8s-lab-plan.md](jetstream2-k8s-lab-plan.md)** | A budget-conscious plan for setting up a K8s learning lab on Jetstream2 using ACCESS credits, with SU cost breakdowns for three cluster tiers. |
+| **[bioinfo-k8s-exercises.md](bioinfo-k8s-exercises.md)** | Six hands-on exercises that teach K8s through real bioinformatics tasks — FastQC jobs, nf-core/rnaseq on the K8s executor, parallel GATK HaplotypeCaller, JupyterHub deployment, GPU cell segmentation, and more. |
 
-# Option B: Via github.com
-# Go to https://github.com/new
-# Name it "k8s-mastery-guide", make it public, click "Create repository"
-# Then clone it:
-git clone https://github.com/YOUR_USERNAME/k8s-mastery-guide.git
-cd k8s-mastery-guide
-```
+## Guide overview
 
-### Step 2: Add the files
+The main guide covers these phases, roughly one per week:
 
-```bash
-# Copy index.html into the repo root
-cp /path/to/index.html .
+- **Phase 0** — Prerequisites, system requirements, and five installation paths (minikube, kind, k3s, kubeadm, managed cloud)
+- **Phases 1–3** — Core architecture, kubectl fluency, workload types (Deployments, StatefulSets, DaemonSets, Jobs, CronJobs)
+- **Phases 4–6** — Networking and Services, persistent storage, ConfigMaps and Secrets
+- **Phases 7–9** — RBAC and security, Helm, autoscaling (HPA/VPA/cluster)
+- **Phase 10** — GPU and HPC workloads (NVIDIA device plugin, node affinity, taints/tolerations, distributed training)
+- **Phase 11** — ML pipelines with Kubeflow
+- **Phase 12** — Observability with Prometheus, Grafana, and Loki
+- **Phase 13** — CRDs, Operators, and GitOps with ArgoCD
 
-# Commit and push
-git add .
-git commit -m "Initial K8s mastery guide"
-git push origin main
-```
+Each section includes a Slurm-to-K8s concept mapping, copy-pasteable YAML manifests, and kubectl commands you can run immediately.
 
-### Step 3: Enable GitHub Pages
+## Bioinformatics exercises
 
-1. Go to your repo on GitHub: `https://github.com/YOUR_USERNAME/k8s-mastery-guide`
-2. Click **Settings** (top tab bar)
-3. Click **Pages** (left sidebar)
-4. Under "Source", select **Deploy from a branch**
-5. Set branch to `main` and folder to `/ (root)`
-6. Click **Save**
+The exercises are designed around real multi-omics workflows:
 
-Your site will be live in ~60 seconds at:
-```
-https://YOUR_USERNAME.github.io/k8s-mastery-guide/
-```
+1. **FastQC Jobs** — Run QC on *P. falciparum* RNA-seq FASTQs as K8s batch Jobs
+2. **nf-core/rnaseq on K8s** — Run a full RNA-seq pipeline using Nextflow's native K8s executor
+3. **Parallel variant calling** — GATK HaplotypeCaller per-chromosome using indexed Jobs
+4. **Persistent services** — Deploy JupyterHub, IGV genome browser, and automated MultiQC reporting
+5. **GPU workloads** — Cell segmentation for Visium/Xenium spatial transcriptomics on A100 GPUs
+6. **Full stack portal** — Multi-service bioinformatics platform with Ingress routing
 
-That's it! Bookmark it and you have your own K8s reference site.
+## Jetstream2 lab plan
 
----
+Three progressively complex cluster tiers on Jetstream2:
 
-## Alternative: Run Locally (No GitHub)
+- **Tier 1** — Single m3.quad with k3s (~240 SUs/month at 15 hrs/week)
+- **Tier 2** — 3-node kubeadm cluster (~576 SUs/month at 12 hrs/week)
+- **Tier 3** — Multi-node + g3.medium GPU worker (~864 SUs/month)
 
-If you just want to open it in your browser without any hosting:
+Includes setup commands, Calico CNI fixes specific to Jetstream2, storage strategies with Manila shares, and a shelving discipline guide to avoid burning credits overnight.
 
-```bash
-# Option 1: Just open the file directly
-# Double-click index.html in your file manager
-# or:
-open index.html          # macOS
-xdg-open index.html      # Linux
-start index.html         # Windows
+## Using the interactive guide
 
-# Option 2: Local dev server (if you want live reload)
-# Python
-python3 -m http.server 8000
-# Then open http://localhost:8000
+The `index.html` file is fully self-contained. You can:
 
-# Node.js
-npx serve .
-# Then open http://localhost:3000
-```
+- **Open it locally** — just double-click or `open index.html`
+- **Host on GitHub Pages** — it's live at the repo's Pages URL if enabled
+- **Serve it anywhere** — drop it on any web server, S3 bucket, or `python3 -m http.server`
 
-> **Note:** The `localStorage`-based progress tracking (marking sections complete, theme preference) works fine when opened as a local file or served over HTTP. It persists across browser sessions.
+Features: sidebar navigation with search, dark/light theme toggle, reading progress bar, code copy buttons, and per-section completion tracking (saved in localStorage).
 
----
+## Who this is for
 
-## Features
-
-- **Sidebar navigation** — jump to any section instantly
-- **Search** — filter sections by keyword
-- **Dark / Light mode** — toggle with the sun/moon button, persists across sessions
-- **Progress bar** — shows reading progress as you scroll
-- **Section completion tracking** — mark sections done, state saved in localStorage
-- **Code copy buttons** — one-click copy on all code blocks
-- **Mobile responsive** — hamburger menu on small screens
-- **Zero dependencies at runtime** — just one HTML file + CDN for marked.js and fonts
-- **Self-contained** — all markdown content is embedded in the HTML
-
-## Updating the Guide
-
-The markdown is embedded inside the `<script id="mdSource" type="text/markdown">` tag in `index.html`. To update the content:
-
-1. Edit the markdown between the `<script>` tags
-2. Commit and push — GitHub Pages auto-deploys
-
-Or, if you prefer to keep the markdown separate:
-1. Edit `k8s-mastery-guide.md`
-2. Re-embed it (replace the content inside the script tag)
-3. Push
+- Bioinformaticians and computational biologists moving from HPC to cloud-native
+- Slurm administrators learning Kubernetes
+- Researchers who want to run Nextflow/nf-core pipelines on K8s
+- Anyone with ACCESS credits on Jetstream2 who wants a K8s lab
 
 ## License
 
-Personal use. Customize freely.
+Personal reference material. Use and adapt freely.
